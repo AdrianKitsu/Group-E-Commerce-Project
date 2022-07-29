@@ -26,3 +26,17 @@ const batchImportCompanies = async () => {
 };
 
 // batchImportCompanies();
+
+const batchImportItems = async () => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("ecommerce");
+    await db.collection("items").insertMany(items);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+};
+batchImportItems();
