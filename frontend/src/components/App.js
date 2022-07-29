@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./GlobalStyles";
+import Header from "./Header";
+import HomePage from "./HomePage";
+import ItemPage from "./ItemPage";
 
 const App = () => {
   return (
