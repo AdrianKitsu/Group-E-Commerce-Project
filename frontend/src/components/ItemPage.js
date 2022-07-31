@@ -1,37 +1,44 @@
-import { useEffect } from "react";
-import { useNavigate, useParams, userNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import items from "../data/items.json";
-import companies from "../data/companies.json";
 
 const ItemPage = () => {
-  const { itemId } = useParams();
-
-//until I get the access to the endpoint, I am using local backend data
-  const item = items.find((item) => item._id === 6543);
-  const company = companies.find((com) => com._id === item?.companyId);
+  const itemId = useParams().item;
+  const [item, setItem] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`/api/items/${itemId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200) setItem(data.data);
+      });
+  }, [itemId]);
 
   const handleAdd = () => {
     navigate("/cart", { state: item });
   };
-  
+
   return (
     <Wrapper>
       <Detail>
         <Img src={item.imageSrc} alt={item.name} />
         <Description>
           <Name>{item.name}</Name>
-          <Price>{item.price}</Price>
-          <Category>{item.category}</Category>
+          <Price>
+            Price : <PriceSpan>{item.price}</PriceSpan>
+          </Price>
           <Stock>
-            <Span>stock: </Span>
-            {item.numInStock}
+            Stock :<Span> {item.numInStock}</Span>
           </Stock>
+          <Category>
+            Category: <Span>{item.category}</Span>
+          </Category>
           <Company>
-            {company.name}, {company.country}
+            made by <Span>{item.companyId}</Span>
           </Company>
-          <CompanyURL>{company.url}</CompanyURL>
+          <CompanyURL>company website: {item.companyId} </CompanyURL>
         </Description>
       </Detail>
       <PurchaseBox>
@@ -47,21 +54,24 @@ const ItemPage = () => {
   );
 };
 const Wrapper = styled.div`
-  max-width: 1000px;
-  margin: 30px auto;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  overflow: hidden;
   display: flex;
-  padding: 30px;
-  justify-content: space-between;
-  border: 1px solid black;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #dddddd;
 `;
 
 const Detail = styled.div`
-  background-color: #a5becc;
-  width: 65%;
-  height: 360px;
-  margin-left: 20px;
+  background-color: var(--color-main-white);
+  width: 70%;
+  height: 350px;
+  margin: 50px 20px;
   padding: 20px;
   display: flex;
+  border-radius: 10px;
 `;
 const Img = styled.img`
   display: block;
@@ -70,10 +80,11 @@ const Img = styled.img`
   width: auto;
   height: auto;
   border-radius: 8px;
+  margin: 30px 10px;
 `;
 
 const Description = styled.div`
-  margin-left: 50px;
+  margin: 20px 50px;
   display: flex;
   flex-direction: column;
   font-size: 16px;
@@ -83,25 +94,45 @@ const Name = styled.p`
   font-size: 24px;
   font-weight: 600;
   margin: 10px 0;
+  border-bottom: 1px solid #7c3e66;
+  padding-bottom: 8px;
 `;
 const Price = styled.p`
-  font-style: italic;
+  font-size: 16px;
+  margin: 10px 0;
 `;
-const Category = styled.p``;
 
-const Stock = styled.p``;
-const Span = styled.span`
+const PriceSpan = styled.span`
   font-weight: 600;
-`;
-const Company = styled.p``;
-const CompanyURL = styled.a`
   color: #7c3e66;
+  font-size: 18px;
+`;
+
+const Stock = styled.p`
+  margin: 5px 0;
+`;
+
+const Span = styled.span`
+  color: #7c3e66;
+  font-size: 15px;
+  font-weight: 500;
+`;
+const Category = styled.p`
+  margin: 10px 0;
+`;
+
+const Company = styled.p`
+  margin-top: 30px;
+`;
+const CompanyURL = styled.a`
+  margin-top: 15px;
+  text-decoration: underline;
 `;
 const PurchaseBox = styled.div`
   width: 15%;
   height: 80px;
-  border: 1px solid grey;
-  margin: 200px 20px 0 0;
+  border: 1px solid #7c3e66;
+  margin: 350px 20px 0 0;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -109,15 +140,15 @@ const PurchaseBox = styled.div`
   align-items: center;
 `;
 const AddButton = styled.button`
-  width: 120px;
+  width: 80%;
   height: 40px;
   font-size: 14px;
-  background-color: #243a73;
+  background-color: var(--color-main-blue);
   color: white;
   text-align: center;
   padding: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: all 300ms ease;
   cursor: pointer;
   &:hover {
@@ -128,12 +159,10 @@ const AddButton = styled.button`
     cursor: not-allowed;
     opacity: 0.4;
     transform: scale(1);
-    background-color: #243a73;
+    background-color: #515e63;
   }
 `;
 const Buy = styled.span`
   margin-bottom: 5px;
 `;
 export default ItemPage;
-
-
