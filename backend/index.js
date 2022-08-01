@@ -3,6 +3,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const { getItems, getItem } = require("./handlers");
+const {
+  itemsByCategory,
+  itemByBodypart,
+  itemByCompany,
+} = require("./itemFilterHandlers");
 
 const PORT = 4000;
 
@@ -32,6 +37,15 @@ express()
   //GET a particular item based on ID
   //returns an object
   .get("/api/items/:itemId", getItem)
+
+  //GET an array of items based on the same category
+  .get("/api/items/category/:category", itemsByCategory)
+
+  //GET an array of items based on the same body part
+  .get("/api/items/body-part/:bodypart", itemByBodypart)
+
+  //GET an array of items based on the same company
+  .get("/api/items/company/:companyId", itemByCompany)
 
   // this is our catch all endpoint.
   .get("*", (req, res) => {
