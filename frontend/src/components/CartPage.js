@@ -1,46 +1,37 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ItemDetail from "./ItemDetail";
+import CartEditForm from "./CartEditForm";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState(null);
-  console.log(cartItems);
+
+  //   console.log(cartItems);
 
   useEffect(() => {
     fetch(`/api/items`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        if (data.status === 200) setCartItems(data.data.results.slice(0, 5));
+        if (data.status === 200) setCartItems(data.data.results.slice(0, 2));
       });
   }, []);
+
+
 
   return (
     <Wrapper>
       <Title>Shopping Cart</Title>
-
       {!cartItems && <div>Loading ...</div>}
       {cartItems && (
         <Container>
           {cartItems.map((item) => {
+            item = { ...item, quantity: 2 };
             return (
               <List>
                 <ItemDetail item={item} />
-                <Edit>
-                  <Form>
-                    <Label for="quantity">Qty:</Label>
-                    <Input
-                      type="number"
-                      id="quantity"
-                      name="quantity"
-                      min="1"
-                      max="50"
-                    />
-                  </Form>
-                  <ItemTotal>Total price: </ItemTotal>
-                  <Delete>Delete</Delete>
-                </Edit>
+                <CartEditForm item={item}  />
               </List>
             );
           })}
@@ -53,16 +44,17 @@ const CartPage = () => {
 };
 
 const Wrapper = styled.div`
+  min-height: 100vh;
   margin: 0;
   padding: 30px 0;
   background-color: #ded7b1;
 `;
 const Title = styled.div`
   width: 100%;
-  height: 50px;
   font-size: 26px;
-  font-weight: 800;
-  padding: 30px;
+  font-weight: 600;
+  padding-left: 35px;
+  font-family: var(--font-poppins);
 `;
 
 const Container = styled.ul`
@@ -83,56 +75,21 @@ const List = styled.li`
   margin-bottom: 10px;
   /* position: relative; */
 `;
-const Edit = styled.li`
-  width: 30%;
-  margin-left: 1%;
-  height: 250px;
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding-left: 30px;
-`;
-const Form = styled.form`
-  font-size: 15px;
-`;
-const Label = styled.label``;
-const Input = styled.input`
-  margin-left: 10px;
-`;
 
-const ItemTotal = styled.div`
-  font-size: 15px;
-`;
-
-const Delete = styled.button`
-  width: 60px;
-  height: 28px;
-  background-color: transparent;
-  border: 1px solid var(--color-point-pink);
-  color: var(--color-point-pink);
-  border-radius: 7px;
-  cursor: pointer;
-  transition: all 300ms ease;
-  :hover {
-    transform: scale(0.95);
-  }
-`;
-
-const SubTotal = styled.h2`
-  text-align: right;
-  margin-right: 120px;
-  padding: 10px;
+const SubTotal = styled.div`
+  width: 20%;
+  height: 20px;
+  margin: 1% 2.5% 1% auto;
+  /* padding: 10px; */
 `;
 const CheckOut = styled.button`
   display: block;
-  width: 180px;
-  height: 40px;
+  width: 20%;
+  height: 38px;
   background-color: var(--color-main-blue);
   border: none;
   border-radius: 18px;
-  margin: 5px 20px 20px auto;
+  margin: 0 3% 0 auto;
   font-size: 14px;
   color: white;
   cursor: pointer;

@@ -1,19 +1,22 @@
 import styled from "styled-components";
 
 const ItemDetail = ({ item }) => {
+    console.log('item-detail', item)
   return (
     <Detail>
-      <Img src={item.imageSrc} alt={item.name} />
+      <ImgContainer>
+        <Img src={item.imageSrc} alt={item.name} />
+      </ImgContainer>
       <Description>
         <Name>{item.name}</Name>
         <Price>
           Price : <PriceSpan>{item.price}</PriceSpan>
         </Price>
-        <Stock>
+        {item.quantity ? <Quantity>Quantity :<Span> {item.quantity}</Span></Quantity> : <Stock>
           Stock :<Span> {item.numInStock}</Span>
-        </Stock>
+        </Stock>}
         <Category>
-          Category: <Span>{item.category}</Span>
+          Category: {item.category}
         </Category>
         <Company>
           made by {"  "} {item.companyId}
@@ -32,6 +35,8 @@ const Detail = styled.div`
   border-radius: 10px;
   /* border: 1px solid blue; */
   color: var(--color-font-darkgrayy);
+  font-family: var(--font-roboto);
+  font-weight: 400;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -40,17 +45,22 @@ const Detail = styled.div`
     padding: 0;
     margin: 50px 0 20px 0;
   }
-
-
+`;
+const ImgContainer = styled.div`
+  max-width: 300px;
+  width: 40%;
+  padding: 0 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid blue; */
 `;
 
 const Img = styled.img`
   display: block;
-  max-height: 300px;
-  width: auto;
-  height: 50%;
-  border-radius: 8px;
-  margin: 30px;
+  width: 90%;
+  height: auto;
+  object-fit: contain;
   /* border: 1px solid red; */
   @media (max-width: 768px) {
     margin: 10px;
@@ -97,6 +107,9 @@ const PriceSpan = styled.span`
 const Stock = styled.p`
   margin: 5px 0;
 `;
+const Quantity = styled.p`
+  margin: 5px 0;
+`
 
 const Span = styled.span`
   color: var(--color-point-pink);

@@ -8,6 +8,9 @@ const ItemPage = () => {
   const itemId = useParams().item;
   const [item, setItem] = useState({});
   const [message, setMessage] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+
+  console.log("qty", quantity);
 
   useEffect(() => {
     fetch(`/api/items/${itemId}`)
@@ -21,7 +24,7 @@ const ItemPage = () => {
   const addIntoCart = () => {
     // fetch(`/api/cart`, {
     //   method: "POST",
-    //   body: JSON.stringify(item),
+    //   body: JSON.stringify({...item, quantity}),
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
@@ -36,6 +39,7 @@ const ItemPage = () => {
     //   });
 
     setMessage(true);
+    console.log('postBody', { ...item, quantity });
   };
 
   return (
@@ -45,7 +49,18 @@ const ItemPage = () => {
       </Container>
       {!message ? (
         <PurchaseBox>
-          <Buy>To buy, </Buy>
+          <Quantity>
+            <Label for="quantity">Quantity:</Label>
+            <Input
+              type="number"
+              id="quantity"
+              name="quantity"
+              min="0"
+              max={item.numInStock + ""}
+              value={quantity}
+              onChange={(ev) => setQuantity(Number(ev.target.value))}
+            />
+          </Quantity>
           <AddButton
             disabled={item?.numInStock > 0 ? false : true}
             onClick={addIntoCart}
@@ -79,7 +94,6 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 425px) {
-    background-color: beige;
   }
 `;
 
@@ -92,8 +106,8 @@ const Container = styled.div`
     height: 500px;
     margin: 10px;
   }
-   @media (max-width: 425px) {
-   height: 420px;
+  @media (max-width: 425px) {
+    height: 420px;
   }
 `;
 const PurchaseBox = styled.div`
@@ -109,19 +123,17 @@ const PurchaseBox = styled.div`
   padding: 5px;
 
   @media (max-width: 768px) {
-    width: 30%;
-    height: 58px;
+    width: 40%;
+    height: 60px;
     margin: 60px 10px;
     font-size: 13px;
   }
   @media (max-width: 425px) {
-    height: 48px;
-
   }
 `;
 const AddButton = styled.button`
   width: 80%;
-  height: 40px;
+  height: 30px;
   font-size: 14px;
   background-color: var(--color-main-blue);
   color: white;
@@ -144,7 +156,7 @@ const AddButton = styled.button`
 
   @media (max-width: 768px) {
     height: 30px;
-      font-size: 13px;
+    font-size: 13px;
   }
   @media (max-width: 425px) {
     height: 25px;
@@ -152,9 +164,16 @@ const AddButton = styled.button`
     padding: 5px;
   }
 `;
-const Buy = styled.span`
-  /* margin-bottom: 5px; */
+const Quantity = styled.form`
+  margin-bottom: 5px;
   font-size: 1em;
+`;
+const Label = styled.label``;
+const Input = styled.input`
+  width: 30px;
+  height: 12px;
+  margin-left: 10px;
+  font-size: 12px;
 `;
 
 const CartMessage = styled(PurchaseBox)`
