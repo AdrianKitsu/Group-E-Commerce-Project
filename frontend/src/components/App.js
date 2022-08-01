@@ -3,6 +3,7 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import HomePage from "./HomePage";
 import ItemPage from "./ItemPage";
+import CartPage from "./CartPage"
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/item/:item" element={<ItemPage />} />
+         <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
   );

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { AiFillCheckCircle } from "react-icons/ai";
+import ItemDetail from "./ItemDetail";
 
 const ItemPage = () => {
   const itemId = useParams().item;
   const [item, setItem] = useState({});
-  const navigate = useNavigate();
+  const [message, setMessage] = useState(false);
 
   useEffect(() => {
     fetch(`/api/items/${itemId}`)
@@ -16,128 +18,106 @@ const ItemPage = () => {
       });
   }, [itemId]);
 
-  const handleAdd = () => {
-    navigate("/cart", { state: item });
+  const addIntoCart = () => {
+    // fetch(`/api/cart`, {
+    //   method: "POST",
+    //   body: JSON.stringify(item),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setMessage(true);
+    //     setTimeout(() => {
+    //       setMessage(false);
+    //     }, 3000);
+    //   });
+
+    setMessage(true);
   };
 
   return (
     <Wrapper>
-      <Detail>
-        <Img src={item.imageSrc} alt={item.name} />
-        <Description>
-          <Name>{item.name}</Name>
-          <Price>
-            Price : <PriceSpan>{item.price}</PriceSpan>
-          </Price>
-          <Stock>
-            Stock :<Span> {item.numInStock}</Span>
-          </Stock>
-          <Category>
-            Category: <Span>{item.category}</Span>
-          </Category>
-          <Company>
-            made by <Span>{item.companyId}</Span>
-          </Company>
-          <CompanyURL>company website: {item.companyId} </CompanyURL>
-        </Description>
-      </Detail>
-      <PurchaseBox>
-        <Buy>To buy, </Buy>
-        <AddButton
-          disabled={item?.numInStock > 0 ? false : true}
-          onClick={handleAdd}
-        >
-          Add to Cart
-        </AddButton>
-      </PurchaseBox>
+      <Container>
+        <ItemDetail item={item} />
+      </Container>
+      {!message ? (
+        <PurchaseBox>
+          <Buy>To buy, </Buy>
+          <AddButton
+            disabled={item?.numInStock > 0 ? false : true}
+            onClick={addIntoCart}
+          >
+            Add to Cart
+          </AddButton>
+        </PurchaseBox>
+      ) : (
+        <CartMessage>
+          <AiFillCheckCircle />
+          Added to Cart
+        </CartMessage>
+      )}
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  margin: 0 auto;
+  /* margin: 0; */
+  /* border: 2px solid blue; */
   overflow: hidden;
   display: flex;
   justify-content: center;
-  overflow: hidden;
-  background-color: #dddddd;
+  background-color: var(--color-main-gray);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  @media (max-width: 425px) {
+    background-color: beige;
+  }
 `;
 
-const Detail = styled.div`
-  background-color: var(--color-main-white);
+const Container = styled.div`
   width: 70%;
-  height: 350px;
-  margin: 50px 20px;
-  padding: 20px;
-  display: flex;
-  border-radius: 10px;
-`;
-const Img = styled.img`
-  display: block;
-  max-width: 250px;
-  max-height: 250px;
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  margin: 30px 10px;
-`;
-
-const Description = styled.div`
-  margin: 20px 50px;
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
-`;
-
-const Name = styled.p`
-  font-size: 24px;
-  font-weight: 600;
-  margin: 10px 0;
-  border-bottom: 1px solid #7c3e66;
-  padding-bottom: 8px;
-`;
-const Price = styled.p`
-  font-size: 16px;
-  margin: 10px 0;
-`;
-
-const PriceSpan = styled.span`
-  font-weight: 600;
-  color: #7c3e66;
-  font-size: 18px;
-`;
-
-const Stock = styled.p`
-  margin: 5px 0;
-`;
-
-const Span = styled.span`
-  color: #7c3e66;
-  font-size: 15px;
-  font-weight: 500;
-`;
-const Category = styled.p`
-  margin: 10px 0;
-`;
-
-const Company = styled.p`
-  margin-top: 30px;
-`;
-const CompanyURL = styled.a`
-  margin-top: 15px;
-  text-decoration: underline;
+  height: 380px;
+  margin: 50px 10px;
+  @media (max-width: 768px) {
+    width: 80%;
+    height: 500px;
+    margin: 10px;
+  }
+   @media (max-width: 425px) {
+   height: 420px;
+  }
 `;
 const PurchaseBox = styled.div`
-  width: 15%;
+  width: 20%;
   height: 80px;
-  border: 1px solid #7c3e66;
-  margin: 350px 20px 0 0;
-  border-radius: 10px;
+  border: 1px solid var(--color-font-darkgray);
+  margin: 350px 10px 0 20px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 5px;
+
+  @media (max-width: 768px) {
+    width: 30%;
+    height: 58px;
+    margin: 60px 10px;
+    font-size: 13px;
+  }
+  @media (max-width: 425px) {
+    height: 48px;
+
+  }
 `;
 const AddButton = styled.button`
   width: 80%;
@@ -146,9 +126,9 @@ const AddButton = styled.button`
   background-color: var(--color-main-blue);
   color: white;
   text-align: center;
-  padding: 10px;
+  padding: 7px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   transition: all 300ms ease;
   cursor: pointer;
   &:hover {
@@ -161,8 +141,26 @@ const AddButton = styled.button`
     transform: scale(1);
     background-color: #515e63;
   }
+
+  @media (max-width: 768px) {
+    height: 30px;
+      font-size: 13px;
+  }
+  @media (max-width: 425px) {
+    height: 25px;
+    font-size: 11px;
+    padding: 5px;
+  }
 `;
 const Buy = styled.span`
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
+  font-size: 1em;
 `;
+
+const CartMessage = styled(PurchaseBox)`
+  color: var(--color-point-pink);
+  background-color: var(--color-main-white);
+  font-size: 16px;
+`;
+
 export default ItemPage;
