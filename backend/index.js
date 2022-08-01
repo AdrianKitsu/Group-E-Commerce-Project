@@ -2,12 +2,13 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const { getItems, getItem } = require("./handlers");
+const { getItems, getItem } = require("./handlers/handlers");
+const { itemsInStock, itemsOutOfStock } = require("./handlers/stockHandler");
 const {
   itemsByCategory,
   itemByBodypart,
   itemByCompany,
-} = require("./itemFilterHandlers");
+} = require("./handlers/itemFilterHandlers");
 
 const PORT = 4000;
 
@@ -46,6 +47,12 @@ express()
 
   //GET an array of items based on the same company
   .get("/api/items/company/:companyId", itemByCompany)
+
+  //GET items array based on if they're in stock
+  .get("/api/items-instock", itemsInStock)
+
+  //GET items array based on if they're out of stock
+  .get("/api/items-out-of-stock", itemsOutOfStock)
 
   // this is our catch all endpoint.
   .get("*", (req, res) => {
