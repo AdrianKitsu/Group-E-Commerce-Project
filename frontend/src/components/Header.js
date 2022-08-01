@@ -26,11 +26,9 @@ export default Header;
 const Wrapper = styled.div`
   width: 100%;
   padding: 14px;
-  height: 50px;
+  height: 80px;
   display: flex;
   justify-content: space-between;
-  margin-left: -8px;
-  margin-top: -8px;
   background-color: var(--color-main-blue);
 `;
 
