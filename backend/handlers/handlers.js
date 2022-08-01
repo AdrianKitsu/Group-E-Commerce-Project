@@ -8,20 +8,6 @@ const options = {
   useUnifiedTopology: true,
 };
 
-// base handler
-// const <HANDLER NEME> = async (req, res) => {
-//     const client = new MongoClient(MONGO_URI, options);
-//     try {
-//       await client.connect();
-//     } catch (err) {
-//       return res
-//         .status(500)
-//         .json({ status: 500, data: req.body, message: err.message });
-//     } finally {
-//       await client.close();
-//     }
-//   };
-
 //retrieve all the items
 
 const getItems = async (req, res) => {
@@ -75,4 +61,32 @@ const getItem = async (req, res) => {
   }
 };
 
-module.exports = { getItems, getItem };
+//GET company based on their id
+const getCompany = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  //changing the req.params to a number
+  const _id = Number(req.params.companyId);
+  try {
+    await client.connect();
+    const db = client.db("ecommerce");
+    //using the number _id to filter for single company
+    const company = await db.collection("companies").findOne({ _id });
+    //if company was found by id status 200 if not status 404
+    //return company as a object
+    company
+      ? res
+          .status(200)
+          .json({ status: 200, data: company, message: "company received" })
+      : res
+          .status(404)
+          .json({ status: 404, data: company, messsage: "company not found" });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ status: 500, data: req.body, message: err.message });
+  } finally {
+    await client.close();
+  }
+};
+
+module.exports = { getItems, getItem, getCompany };

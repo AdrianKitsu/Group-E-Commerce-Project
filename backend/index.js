@@ -2,7 +2,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const { getItems, getItem } = require("./handlers/handlers");
+const { getItems, getItem, getCompany } = require("./handlers/handlers");
 const { itemsInStock, itemsOutOfStock } = require("./handlers/stockHandler");
 const {
   itemsByCategory,
@@ -39,6 +39,9 @@ express()
   //returns an object
   .get("/api/items/:itemId", getItem)
 
+  //GET a company based on ID, return an object
+  .get("/api/companies/:companyId", getCompany)
+
   //GET an array of items based on the same category
   .get("/api/items/category/:category", itemsByCategory)
 
@@ -53,6 +56,8 @@ express()
 
   //GET items array based on if they're out of stock
   .get("/api/items-out-of-stock", itemsOutOfStock)
+
+  //POST creating an order for checkout
 
   // this is our catch all endpoint.
   .get("*", (req, res) => {
