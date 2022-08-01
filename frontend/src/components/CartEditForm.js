@@ -1,13 +1,19 @@
 import styled from "styled-components";
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
-const CartEditForm = ({ item }) => {
+const CartEditForm = ({ item, updateCart, delelteItem }) => {
   const [editedQuantity, setEditedQuantity] = useState(item.quantity);
+  const [totalPrice, setTotalPrice] = useState(
+    Number(item.price.slice(1)) * item.quantity
+  );
 
-    const updateQuantity = (ev) => {
+  const handleUpdateQuantity = (ev) => {
     ev.preventDefault();
-    console.log("func" );
+    const updatedPrice = Number(item.price.slice(1)) * Number(editedQuantity);
+    setTotalPrice(updatedPrice);
+    updateCart(item._id, updatedPrice, Number(editedQuantity));
   };
+
   return (
     <Edit>
       <Form>
@@ -21,15 +27,15 @@ const CartEditForm = ({ item }) => {
             setEditedQuantity(ev.target.value);
           }}
         />
-        <InputButton onClick={updateQuantity}>Update</InputButton>
+        <UpdateButton onClick={handleUpdateQuantity}>Update</UpdateButton>
       </Form>
-      <ItemTotal>Total price: </ItemTotal>
-      <Delete>Delete</Delete>
+      <ItemTotal>Total price: $ {totalPrice} </ItemTotal>
+      <DeleteButton onClick={delelteItem}>Delete</DeleteButton>
     </Edit>
   );
 };
 
-const Edit = styled.li`
+const Edit = styled.div`
   width: 30%;
   margin-left: 1%;
   height: 250px;
@@ -38,7 +44,8 @@ const Edit = styled.li`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding-left: 30px;
+  padding: 0 30px 90px 30px;
+  font-family: var(--font-roboto);
 `;
 const Form = styled.form`
   font-size: 15px;
@@ -47,7 +54,7 @@ const Label = styled.label``;
 const Input = styled.input`
   margin-left: 10px;
 `;
-const InputButton = styled.button`
+const UpdateButton = styled.button`
   background-color: transparent;
   border: 1px solid var(--color-point-pink);
   color: var(--color-point-pink);
@@ -59,14 +66,17 @@ const InputButton = styled.button`
   transition: all 300ms ease;
   :hover {
     transform: scale(0.95);
+    background-color: var(--color-point-pink);
+    color: var(--color-main-white);
   }
 `;
 
 const ItemTotal = styled.div`
   font-size: 15px;
+  font-weight: 600;
 `;
 
-const Delete = styled.button`
+const DeleteButton = styled.button`
   width: 60px;
   height: 25px;
   background-color: transparent;
@@ -75,8 +85,11 @@ const Delete = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: all 300ms ease;
+
   :hover {
     transform: scale(0.95);
+    background-color: var(--color-point-pink);
+    color: var(--color-main-white);
   }
 `;
 
