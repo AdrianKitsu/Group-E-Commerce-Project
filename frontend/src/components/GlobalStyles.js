@@ -5,7 +5,8 @@ export default createGlobalStyle`
     --color-main-blue: #646FD4;
     --color-main-white: #FFFFFF;
     --color-main-gray: #dddddd; 
-    --color-point-purple: #7c3e66;
+    --color-point-pink:  #f54748;
+    --color-font-darkgray: #393e46;
 }
 
 html, body, div, span, applet, object, iframe,
@@ -24,7 +25,7 @@ html, body, div, span, applet, object, iframe,
       margin: 0;
       padding: 0;
       border: 0;
-      /* box-sizing: border-box; */
+      box-sizing: border-box;
       font-size: 100%;
       vertical-align: baseline;
   }
@@ -33,4 +34,7 @@ ol, ul {
       list-style: none;
   }
 
+body {
+  width: 100%;
+}
 `;
