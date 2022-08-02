@@ -15,6 +15,7 @@ const {
   creatingCart,
   getCart,
 } = require("./handlers/cartHandlers");
+const { updateQuantity } = require("./handlers/updateCartHandler");
 
 const PORT = 4000;
 
@@ -36,7 +37,7 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
-  //---------------REST endpoints ---------------------//
+  //---------------item endpoints ---------------------//
   //GET all items
   //returns an array if objects
   .get("/api/items", getItems)
@@ -44,9 +45,6 @@ express()
   //GET a particular item based on ID
   //returns an object
   .get("/api/items/:itemId", getItem)
-
-  //GET a company based on ID, return an object
-  .get("/api/companies/:companyId", getCompany)
 
   //GET an array of items based on the same category
   .get("/api/items/category/:category", itemsByCategory)
@@ -63,8 +61,17 @@ express()
   //GET items array based on if they're out of stock
   .get("/api/items-out-of-stock", itemsOutOfStock)
 
+  //-------------- Company endpoints --------------------------//
+
+  //GET a company based on ID, return an object
+  .get("/api/companies/:companyId", getCompany)
+
+  //---------------- Order endpoints ---------------------------//
+
   //POST creating an order for checkout --- does not work
   .post("/api/order", createOrder)
+
+  //------------------------CART endpoints ---------------------------//
 
   //POST for creating new cart if cart does not exist and adding non repeatable items to cart
   .post("/api/cart/:user", creatingCart)
@@ -72,7 +79,13 @@ express()
   //GET for retrieveing a cart
   .get("/api/cart/:user", getCart)
 
-  // this is our catch all endpoint.
+  //patch to update the quantity of the item
+  .patch("/api/cart/:user", updateQuantity)
+
+  //delete item in cart
+
+  // ------------------- this is our catch all endpoint -------------------//
+
   .get("*", (req, res) => {
     res.status(404).json({
       status: 404,
