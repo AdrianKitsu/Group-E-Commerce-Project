@@ -24,15 +24,14 @@ const CartPage = () => {
         console.log(data.data);
         if (data.status === 200) {
           setCart(data.data.purchasedItems);
-            setSubTotal(
-              data.data.purchasedItems.reduce((accu, curr) => {
-                return Number(curr.price.slice(1)) * curr.quantity + accu;
-              }, 0)
-            );
+          setSubTotal(
+            data.data.purchasedItems.reduce((accu, curr) => {
+              return Number(curr.price.slice(1)) * curr.quantity + accu;
+            }, 0)
+          );
         }
       });
   }, []);
-
 
   useEffect(async () => {
     if (cart) {
@@ -118,7 +117,7 @@ const CartPage = () => {
       }
     }, 0);
     console.log("updatedSubTotal", updatedSubTotal);
-    setSubTotal(Number.parseFloat(updatedSeubTotal).toFixed(2));
+    setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
   };
 
   //post order
@@ -185,7 +184,7 @@ const Container = styled.ul`
   align-items: center;
   padding-top: 10px;
   font-size: 13px;
-   border: 1px solid red;
+  border: 1px solid red;
 `;
 
 const List = styled.li`
@@ -197,8 +196,7 @@ const List = styled.li`
   align-items: center;
   margin-bottom: 10px;
   /* position: relative; */
-   @media (max-width: 768px) {
-   
+  @media (max-width: 768px) {
   }
 `;
 

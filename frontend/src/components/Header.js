@@ -1,21 +1,27 @@
 import { IoCartOutline, IoStorefront, IoSearch } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = () => {
   return (
     <Wrapper>
       <Logo>
-        <IoStorefront size={50} />
+        <Linkss to={"/"}>
+          <IoStorefront size={50} />
+        </Linkss>
       </Logo>
+
       <SearchContainer>
         <SearchIcon>
           <IoSearch size={20} />
         </SearchIcon>
-
-        <SearchBar></SearchBar>
+        <SearchBar placeholder="This is Just Decoration"></SearchBar>
       </SearchContainer>
+
       <Cart>
-        <IoCartOutline size={30} />
+        <LinkCart to={"/cart"}>
+          <IoCartOutline size={30} />
+        </LinkCart>
       </Cart>
     </Wrapper>
   );
@@ -37,6 +43,24 @@ const Logo = styled.div`
   margin-left: 10px;
 `;
 
+const Linkss = styled(Link)`
+  text-decoration: none;
+  color: var(--color-main-white);
+  :hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+`;
+
+const LinkCart = styled(Link)`
+  text-decoration: none;
+  color: var(--color-main-white);
+  :hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+`;
+
 const Cart = styled.div`
   color: var(--color-main-white);
   margin-top: 10px;
@@ -45,6 +69,11 @@ const Cart = styled.div`
     cursor: pointer;
     opacity: 0.6;
   }
+`;
+
+const SearchIcon = styled.div`
+  color: var(--color-main-white);
+  margin-top: 15px;
 `;
 
 const SearchBar = styled.input`
@@ -56,8 +85,7 @@ const SearchBar = styled.input`
   margin-left: 10px;
 `;
 
-const SearchContainer = styled.div``;
-
-const SearchIcon = styled.span`
-  color: var(--color-main-white);
+const SearchContainer = styled.div`
+  display: flex;
+  vertical-align: middle;
 `;

@@ -7,6 +7,7 @@ export default createGlobalStyle`
     --color-main-gray: #dddddd; 
     --color-point-pink:  #f54748;
     --color-font-darkgray: #393e46;
+    --color-filter-background: #BDE6F1;
     --font-poppins: 'Poppins', sans-serif;
     --font-roboto: 'Roboto', sans-serif;
 }
