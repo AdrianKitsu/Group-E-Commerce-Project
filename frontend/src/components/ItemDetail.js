@@ -1,24 +1,36 @@
 import styled from "styled-components";
 
-const ItemDetail = ({ item }) => {
+const ItemDetail = ({ item, company, detailed }) => {
   return (
     <Detail>
-      <Img src={item.imageSrc} alt={item.name} />
+      <ImgContainer>
+        <Img src={item.imageSrc} alt={item.name} />
+      </ImgContainer>
       <Description>
         <Name>{item.name}</Name>
         <Price>
           Price : <PriceSpan>{item.price}</PriceSpan>
         </Price>
-        <Stock>
-          Stock :<Span> {item.numInStock}</Span>
-        </Stock>
-        <Category>
-          Category: <Span>{item.category}</Span>
-        </Category>
-        <Company>
-          made by {"  "} {item.companyId}
-        </Company>
-        <CompanyURL>company website: {item.companyId} </CompanyURL>
+        {detailed === "true" ? (
+          <Stock>
+            Stock :<Span> {item.numInStock}</Span>
+          </Stock>
+        ) : (
+          <Quantity>
+            Quantity :<Span> {item.quantity}</Span>
+          </Quantity>
+        )}
+        <Category>Category: {item.category}</Category>
+        {company && (
+          <Company>
+            made by{" "}
+            <CompanyName>
+              {company.name}, {company.country}
+            </CompanyName>
+            {"  "}
+            <CompanyURL> {company.url} </CompanyURL>
+          </Company>
+        )}
       </Description>
     </Detail>
   );
@@ -31,7 +43,9 @@ const Detail = styled.div`
   display: flex;
   border-radius: 10px;
   /* border: 1px solid blue; */
-  color: var(--color-font-darkgrayy);
+  color: var(--color-font-darkgray);
+  font-family: var(--font-roboto);
+  font-weight: 400;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -40,17 +54,22 @@ const Detail = styled.div`
     padding: 0;
     margin: 50px 0 20px 0;
   }
-
-
+`;
+const ImgContainer = styled.div`
+  max-width: 300px;
+  width: 40%;
+  padding: 0 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid blue; */
 `;
 
 const Img = styled.img`
   display: block;
-  max-height: 300px;
-  width: auto;
-  height: 50%;
-  border-radius: 8px;
-  margin: 30px;
+  width: 90%;
+  height: auto;
+  object-fit: contain;
   /* border: 1px solid red; */
   @media (max-width: 768px) {
     margin: 10px;
@@ -97,6 +116,9 @@ const PriceSpan = styled.span`
 const Stock = styled.p`
   margin: 5px 0;
 `;
+const Quantity = styled.p`
+  margin: 5px 0;
+`;
 
 const Span = styled.span`
   color: var(--color-point-pink);
@@ -108,17 +130,24 @@ const Span = styled.span`
 `;
 const Category = styled.p`
   margin: 10px 0;
+  font-size: 13px;
 `;
 
 const Company = styled.p`
   margin-top: 15px;
+  font-size: 13px;
+  color: #707070;
+`;
+const CompanyName = styled.p`
+  margin: 5px 0;
 `;
 const CompanyURL = styled.a`
   margin-top: 10px;
   text-decoration: underline;
+  color: var(--color-main-blue);
   cursor: pointer;
   &:hover {
-    color: var(--color-main-blue);
+    color: var(--color-point-pink);
   }
 `;
 export default ItemDetail;

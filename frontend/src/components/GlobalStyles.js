@@ -7,6 +7,8 @@ export default createGlobalStyle`
     --color-main-gray: #dddddd; 
     --color-point-pink:  #f54748;
     --color-font-darkgray: #393e46;
+    --font-poppins: 'Poppins', sans-serif;
+    --font-roboto: 'Roboto', sans-serif;
 }
 
 html, body, div, span, applet, object, iframe,
@@ -37,4 +39,5 @@ ol, ul {
 body {
   width: 100%;
 }
+
 `;
