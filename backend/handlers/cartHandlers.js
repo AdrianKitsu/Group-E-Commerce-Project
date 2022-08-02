@@ -42,7 +42,7 @@ const creatingCart = async (req, res) => {
     }
     //if cart exists
     else {
-      const data = await db.collection("cart").update(
+      const data = await db.collection("cart").updateOne(
         {
           user,
         },
