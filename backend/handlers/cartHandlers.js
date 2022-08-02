@@ -11,7 +11,7 @@ const options = {
 // use this package to generate unique ids: https://www.npmjs.com/package/uuid
 const { v4: uuidv4 } = require("uuid");
 
-//adding item to cart
+//adding item to cart or creating cart if no cart exist
 
 const creatingCart = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
@@ -98,7 +98,5 @@ const getCart = async (req, res) => {
     client.close();
   }
 };
-
-//delete an item from cart
 
 module.exports = { creatingCart, getCart };
