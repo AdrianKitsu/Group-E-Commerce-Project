@@ -9,8 +9,8 @@ const options = {
 };
 
 const deleteItem = async (req, res) => {
-  const user = req.params;
-  const { itemId } = req.body;
+  const user = req.params.user;
+  const itemId = req.body._id;
 
   const client = new MongoClient(MONGO_URI, options);
   try {
@@ -31,12 +31,9 @@ const deleteItem = async (req, res) => {
     else {
       //remove the item from purchasedItems
       //update based on user's cart and pull item based on item out of purchasedItems
-      const remove = db
+      const remove = await db
         .collection("cart")
-        .updateOne(
-          { user },
-          { $pull: { purchasedItems: { $in: { itemId } } } }
-        );
+        .updateOne({ user }, { $pull: { purchasedItems: { _id: itemId } } });
 
       return res
         .status(200)
