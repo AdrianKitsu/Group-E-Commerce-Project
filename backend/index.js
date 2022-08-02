@@ -9,6 +9,12 @@ const {
   itemByBodypart,
   itemByCompany,
 } = require("./handlers/itemFilterHandlers");
+const { createOrder } = require("./handlers/orderHandlers1");
+const {
+  addItemToCart,
+  creatingCart,
+  getCart,
+} = require("./handlers/cartHandlers");
 
 const PORT = 4000;
 
@@ -57,7 +63,14 @@ express()
   //GET items array based on if they're out of stock
   .get("/api/items-out-of-stock", itemsOutOfStock)
 
-  //POST creating an order for checkout
+  //POST creating an order for checkout --- does not work
+  .post("/api/order", createOrder)
+
+  //POST for creating new cart if cart does not exist and adding non repeatable items to cart
+  .post("/api/cart/:user", creatingCart)
+
+  //GET for retrieveing a cart
+  .get("/api/cart/:user", getCart)
 
   // this is our catch all endpoint.
   .get("*", (req, res) => {
