@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-  const itemId = useParams().item;
   const [items, setItems] = useState();
   const [status, setStatus] = useState("loading");
 
@@ -27,10 +25,9 @@ const HomePage = () => {
       <Container>
         <Wrapper>
           {items.results.map((theItems) => {
-            console.log("hiyyh", theItems);
             return (
               <Item>
-                <Linkw to={`/api/items/${itemId}`}>
+                <Linkw to={`item/${theItems._id}`}>
                   <Img
                     key={theItems}
                     src={theItems.imageSrc}
@@ -66,7 +63,7 @@ const Wrapper = styled.div`
 
 const Item = styled.div`
   max-width: 250px;
-  max-height: 250px;
+  max-height: fit-content;
   width: auto;
   height: auto;
   border-radius: 8px;
@@ -86,7 +83,7 @@ const Linkw = styled(Link)`
 `;
 
 const Img = styled.img`
-  display: block;
+  display: flex;
   align-items: center;
   max-width: 250px;
   max-height: 250px;
@@ -98,8 +95,9 @@ const Img = styled.img`
 `;
 
 const Name = styled.p`
-  font-size: 13px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
   text-align: center;
+  text-size-adjust: auto;
   max-width: 250px;
 `;
