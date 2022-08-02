@@ -34,10 +34,9 @@ const createOrder = async (req, res) => {
       const newInStock = Number(item.numInStock) - Number(item.quantity);
       const _id = item._id;
       //updating each item based on their id
-
       /////////-----does not work-------/////
       ////will need to figure out how to update each item in purchasedItems
-      db.collection("items").updateOne(
+      await db.collection("items").updateOne(
         { _id },
         { $set: { numInStock: newInStock } }
       );

@@ -72,6 +72,9 @@ express()
   //POST creating an order for checkout --- does not work
   .post("/api/order", createOrder)
 
+  // GET for retrieving all the orders
+  //GET for retreiving an order based on the order _id
+
   //------------------------CART endpoints ---------------------------//
 
   //POST for creating new cart if cart does not exist and adding non repeatable items to cart
