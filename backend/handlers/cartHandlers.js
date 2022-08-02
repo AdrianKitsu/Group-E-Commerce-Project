@@ -15,8 +15,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const creatingCart = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  //the logged in user's id, itemId and quantity of item
-  const { itemId, quantity } = req.body;
+
   const user = req.params.user;
   //create random id
   const _id = uuidv4();
@@ -34,15 +33,7 @@ const creatingCart = async (req, res) => {
       cart = await db.collection("cart").insertOne({
         _id,
         user,
-        purchasedItems: [
-          {
-            itemId,
-            quantity,
-            total: numPrice * quantity,
-            price,
-          },
-        ],
-        subTotal: numPrice * quantity,
+        purchasedItems: [req.body],
       });
 
       return res

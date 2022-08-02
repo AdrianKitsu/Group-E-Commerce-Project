@@ -16,6 +16,7 @@ const {
   getCart,
 } = require("./handlers/cartHandlers");
 const { updateQuantity } = require("./handlers/updateCartHandler");
+const { deleteItem } = require("./handlers/deleteCartHandlers");
 
 const PORT = 4000;
 
@@ -83,6 +84,7 @@ express()
   .patch("/api/cart/:user", updateQuantity)
 
   //delete item in cart
+  .delete("/api/cart/:user", deleteItem)
 
   // ------------------- this is our catch all endpoint -------------------//
 
