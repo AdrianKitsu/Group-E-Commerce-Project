@@ -5,57 +5,63 @@ import ItemDetail from "./ItemDetail";
 import CartEditForm from "./CartEditForm";
 
 const CartPage = () => {
-    const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([
-    {
-      _id: 6544,
-      quantity: 2,
-      name: "Belkin GS5 Sport Fit Armband, Black F8M918B1C00",
-      price: "$24.99",
-      body_location: "Arms",
-      category: "Fitness",
-      imageSrc:
-        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
-      numInStock: 9,
-      companyId: 16384,
-    },
-    {
-      _id: 6545,
-      quantity: 1,
-      name: "Bowflex EZ Pro Strapless Heart Rate Monitor Watch, Black",
-      price: "$12.99",
-      body_location: "Wrist",
-      category: "Medical",
-      imageSrc:
-        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
-      numInStock: 5,
-      companyId: 11385,
-    },
-  ]);
-  const [subTotal, setSubTotal] = useState(
-    cartItems.reduce((accu, curr) => {
-      return Number(curr.price.slice(1)) * curr.quantity + accu;
-    }, 0)
-  );
+  const user = "ourUser";
+  const navigate = useNavigate();
+  const [cart, setCart] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [subTotal, setSubTotal] = useState(null);
+  console.log("cart-", cart);
+  // 0: {itemId: 6544, quantity: 3, total: 74.97, price: '$24.99'}
+  // 1: {quantity: 2, itemId: 6543}
+  // 2: {quantity: 2, itemId: 6544}
 
-  //   console.log(subTotal);
+  console.log("cartItems-", cartItems);
 
-  //   useEffect(() => {
-  //     fetch(`/api/items`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log(data);
-  //         if (data.status === 200) {
-  //           setCartItems(data.data.results.slice(0, 2));
-  //         }
-  //       });
-  //   }, []);
+  useEffect(() => {
+    fetch(`/api/cart/${user}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.data);
+        if (data.status === 200) {
+          setCart(data.data.purchasedItems);
+            setSubTotal(
+              data.data.purchasedItems.reduce((accu, curr) => {
+                return Number(curr.price.slice(1)) * curr.quantity + accu;
+              }, 0)
+            );
+        }
+      });
+  }, []);
 
-  const updateCart = (id, updatedPrice, editedQuantity) => {
-    console.log("update-", id, updatedPrice, editedQuantity);
+
+  useEffect(async () => {
+    if (cart) {
+      try {
+        const promises = await Promise.all(
+          cart.map((item) => fetch(`/api/items/${item.itemId}`))
+        );
+
+        const itemsArr = await Promise.all(promises.map((res) => res.json()));
+        console.log(itemsArr);
+
+        setCartItems(
+          itemsArr.map((item) => {
+            const theItem = cart.find((el) => el.itemId === item.data._id);
+            return { ...item.data, quantity: theItem.quantity };
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [cart]);
+
+  //update quantity
+  const updateCart = (_id, updatedPrice, editedQuantity) => {
+    console.log("update-", _id, updatedPrice, editedQuantity);
 
     const updatedCartItems = cartItems.map((item) => {
-      if (item._id === id) {
+      if (item._id === _id) {
         return { ...item, quantity: editedQuantity };
       } else {
         return item;
@@ -64,7 +70,7 @@ const CartPage = () => {
     setCartItems(updatedCartItems);
 
     const updatedSubTotal = cartItems.reduce((accu, curr) => {
-      if (curr._id === id) {
+      if (curr._id === _id) {
         return updatedPrice + accu;
       } else {
         return Number(curr.price.slice(1)) * curr.quantity + accu;
@@ -73,7 +79,7 @@ const CartPage = () => {
     console.log("updatedSubTotal", updatedSubTotal);
     setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
 
-    //   const update = { ...item, quantity: editedQuantity };
+    //   const update = { _id,  quantity: editedQuantity};
 
     // fetch('/api/cart', {
     //  method: "PATCH",
@@ -81,17 +87,18 @@ const CartPage = () => {
     //  header: "Content-Type": "application/json",
     // }
     // )
-    // .then((res) => res.json())
+    // .then((res) => res.json(update))
     // .then((data) => {
     //       console.log(data.data)
     //     })
     // .catch((err) => console.log(err));
   };
 
-  const handleDelteItem = (itemId) => {
-    // fetch('/api/cart', {
+  // delete item
+  const handleDelteItem = (_id) => {
+    // fetch('/api/cart/userId', {
     //  method: "DELETE",
-    //  body: JSON.stringify(itemId),
+    //  body: JSON.stringify(_id),
     //  header: "Content-Type": "application/json",
     // }
     // )
@@ -101,35 +108,47 @@ const CartPage = () => {
     //     })
     // .catch((err) => console.log(err));
 
-    const updatedCartItems = cartItems.filter((item) => item._id !== itemId);
+    const updatedCartItems = cartItems.filter((item) => item._id !== _id);
     setCartItems(updatedCartItems);
-
     const updatedSubTotal = cartItems.reduce((accu, curr) => {
-      if (curr._id === itemId) {
-        return  accu;
+      if (curr._id === _id) {
+        return accu;
       } else {
         return Number(curr.price.slice(1)) * curr.quantity + accu;
       }
     }, 0);
     console.log("updatedSubTotal", updatedSubTotal);
-    setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
+    setSubTotal(Number.parseFloat(updatedSeubTotal).toFixed(2));
   };
 
-const handleCheckOut=()=>{
+  //post order
+  const handleCheckOut = () => {
     //fetch POST to order endpoint
-    navigate('/order')
-}
+    // fetch(`/api/order/userId`, {
+    //   method: "POST",
+    //   body: JSON.stringify(),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //
+    //   });
+    navigate("/order");
+  };
 
   return (
     <Wrapper>
       <Title>Shopping Cart</Title>
-      {!cartItems && <div>Loading ...</div>}
-      {cartItems && (
+      {cartItems.length === 0 && <div>Loading ...</div>}
+      {cartItems.length > 0 && (
         <Container>
           {cartItems.map((item) => {
             return (
               <List key={item._id}>
-                <ItemDetail item={item} detailed="false"/>
+                <ItemDetail item={item} detailed="false" />
                 <CartEditForm
                   item={item}
                   updateCart={updateCart}
@@ -166,17 +185,21 @@ const Container = styled.ul`
   align-items: center;
   padding-top: 10px;
   font-size: 13px;
+   border: 1px solid red;
 `;
 
 const List = styled.li`
   width: 95%;
-  height: 250px;
-  /* border: 1px solid blue; */
+  height: 230px;
+  border: 1px solid blue;
   display: flex;
   /* justify-content: center; */
   align-items: center;
   margin-bottom: 10px;
   /* position: relative; */
+   @media (max-width: 768px) {
+   
+  }
 `;
 
 const SubTotal = styled.div`
@@ -207,3 +230,28 @@ const CheckOut = styled.button`
 `;
 
 export default CartPage;
+
+// {
+//       _id: 6544,
+//       quantity: 2,
+//       name: "Belkin GS5 Sport Fit Armband, Black F8M918B1C00",
+//       price: "$24.99",
+//       body_location: "Arms",
+//       category: "Fitness",
+//       imageSrc:
+//         "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
+//       numInStock: 9,
+//       companyId: 16384,
+//     },
+//     {
+//       _id: 6545,
+//       quantity: 1,
+//       name: "Bowflex EZ Pro Strapless Heart Rate Monitor Watch, Black",
+//       price: "$12.99",
+//       body_location: "Wrist",
+//       category: "Medical",
+//       imageSrc:
+//         "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
+//       numInStock: 5,
+//       companyId: 11385,
+//     },

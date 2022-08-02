@@ -5,13 +5,12 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import ItemDetail from "./ItemDetail";
 
 const ItemPage = () => {
+  const user = "ourUser";
   const itemId = useParams().item;
   const [item, setItem] = useState(null);
   const [message, setMessage] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [company, setCompany] = useState(null);
-
-  console.log("qty", quantity);
 
   useEffect(() => {
     if (itemId) {
@@ -35,24 +34,24 @@ const ItemPage = () => {
     }
   }, [item]);
 
+  // POST item into user's cart
   const addIntoCart = () => {
-    // fetch(`/api/cart`, {
-    //   method: "POST",
-    //   body: JSON.stringify({...item, quantity}),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setMessage(true);
-    //     setTimeout(() => {
-    //       setMessage(false);
-    //     }, 3000);
-    //   });
+    fetch(`/api/cart/${user}`, {
+      method: "POST",
+      body: JSON.stringify({ ...item, quantity }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          console.log(data);
+          setMessage(true);
+        }
+      })
+      .catch((err) => console.log(err.message));
 
-    setMessage(true);
     console.log("postBody", { ...item, quantity });
   };
 

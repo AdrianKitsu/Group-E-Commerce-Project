@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const CartEditForm = ({ item, updateCart, delelteItem }) => {
   const [editedQuantity, setEditedQuantity] = useState(item.quantity);
+  console.log(item)
   const [totalPrice, setTotalPrice] = useState(
     Number(item.price.slice(1)) * item.quantity
   );
@@ -37,8 +38,8 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
 
 const Edit = styled.div`
   width: 30%;
-  margin-left: 1%;
-  height: 250px;
+  margin-left: 15px;
+  height: 230px;
   background-color: white;
   border-radius: 10px;
   display: flex;
@@ -46,6 +47,7 @@ const Edit = styled.div`
   justify-content: space-evenly;
   padding: 0 30px 90px 30px;
   font-family: var(--font-roboto);
+ 
 `;
 const Form = styled.form`
   font-size: 15px;
