@@ -31,7 +31,7 @@ const updateQuantity = async (req, res) => {
 
     //filter checking to see if item exist in purchasedItems array
     const foundItemArr = cart.purchasedItems.filter(
-      (item) => item.itemId === itemId
+      (item) => item._id === itemId
     );
 
     //turns found item into object
