@@ -17,7 +17,7 @@ const deleteItem = async (req, res) => {
     await client.connect();
     const db = client.db("ecommerce");
     //finding cart of specific user
-    const usersCart = db.collection("cart").findOne({ user });
+    const usersCart = await db.collection("cart").findOne({ user });
 
     //if there is no usersCart return error
     if (!usersCart) {
@@ -31,13 +31,24 @@ const deleteItem = async (req, res) => {
     else {
       //remove the item from purchasedItems
       //update based on user's cart and pull item based on item out of purchasedItems
-      const remove = await db
+      const removeItem = await db
         .collection("cart")
         .updateOne({ user }, { $pull: { purchasedItems: { _id: itemId } } });
 
-      return res
-        .status(200)
-        .json({ status: 200, data: remove, message: "item deleted from cart" });
+      //find cart based on user and check if purchasedItems.length === 0 if true delete the cart
+      const cart = await db.collection("cart").findOne({ user });
+      if (cart.purchasedItems.length === 0) {
+        const removeCart = await db.collection("cart").remove({ user });
+        return res
+          .status(200)
+          .json({ status: 200, data: removeCart, message: "cart removed" });
+      }
+
+      return res.status(200).json({
+        status: 200,
+        data: removeItem,
+        message: "item deleted from cart",
+      });
     }
   } catch (err) {
     return res
