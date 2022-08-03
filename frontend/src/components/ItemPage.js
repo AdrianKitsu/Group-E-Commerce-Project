@@ -96,12 +96,11 @@ const ItemPage = () => {
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
-  /* border: 2px solid blue; */
   overflow: hidden;
   display: flex;
   justify-content: center;
-  background-color: var(--color-main-gray);
-
+ 
+ background-color: var(--color-main-brown);
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
@@ -114,13 +113,13 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   width: 70%;
-  height: 370px;
+  height: 380px;
   margin: 50px 10px;
 
   @media (max-width: 768px) {
     width: 80%;
-    height: 550px;
-    margin: 10px;
+    height: 500px;
+    margin: 20px;
   }
   @media (max-width: 425px) {
     height: 420px;
@@ -141,8 +140,8 @@ const PurchaseBox = styled.div`
   @media (max-width: 768px) {
     width: 40%;
     height: 70px;
-    margin:  10px;
-    /* font-size: 13px; */
+    margin:0;
+   
   }
   @media (max-width: 425px) {
   }

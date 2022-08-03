@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const ItemDetail = ({ item, company, detailed }) => {
   return (
     <Detail>
-      <ImgContainer>
+      <ImgContainer to={`/item/${item._id}`}>
         <Img src={item.imageSrc} alt={item.name} />
       </ImgContainer>
       <Description>
@@ -41,8 +42,9 @@ const Detail = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  align-items: center;
   border-radius: 10px;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   color: var(--color-font-darkgray);
   font-family: var(--font-roboto);
   font-weight: 400;
@@ -55,25 +57,28 @@ const Detail = styled.div`
     /* margin: 50px 0 20px 0; */
   }
 `;
-const ImgContainer = styled.div`
+const ImgContainer = styled(Link)`
   max-width: 300px;
   width: 40%;
+  height: 90%;
   padding: 0 2%;
   display: flex;
   justify-content: center;
   align-items: center;
   /* border: 1px solid blue; */
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     margin: 10px;
   }
 `;
 
 const Img = styled.img`
   display: block;
+  max-width: 100%;
+  max-height: 100%;
   width: 90%;
   height: auto;
   object-fit: contain;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   @media (max-width: 768px) {
     margin: 10px;
   }
@@ -101,8 +106,11 @@ const Name = styled.p`
   margin: 0.1em 0;
   border-bottom: 1px solid var(--color-font-darkgray);
   padding-bottom: 8px;
-  @media (max-width: 425px) {
+  @media (max-width: 768px) {
     font-size: 16px;
+  }
+  @media (max-width: 425px) {
+    font-size: 14px;
   }
 `;
 const Price = styled.p`
@@ -144,7 +152,7 @@ const Company = styled.p`
 const CompanyName = styled.p`
   margin: 5px 0;
   font-size: 13px;
-  color:var(--color-font-darkgray)
+  color: var(--color-font-darkgray);
 `;
 const CompanyURL = styled.a`
   margin-top: 10px;
