@@ -114,11 +114,12 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   width: 70%;
-  height: 380px;
+  height: 370px;
   margin: 50px 10px;
+
   @media (max-width: 768px) {
     width: 80%;
-    height: 500px;
+    height: 550px;
     margin: 10px;
   }
   @media (max-width: 425px) {
@@ -129,7 +130,7 @@ const PurchaseBox = styled.div`
   width: 20%;
   height: 80px;
   border: 1px solid var(--color-font-darkgray);
-  margin: 350px 10px 0 20px;
+  margin: 340px 10px 0 20px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -140,7 +141,7 @@ const PurchaseBox = styled.div`
   @media (max-width: 768px) {
     width: 40%;
     height: 70px;
-    margin: 60px 10px;
+    margin:  10px;
     /* font-size: 13px; */
   }
   @media (max-width: 425px) {

@@ -42,7 +42,7 @@ const Detail = styled.div`
   height: 100%;
   display: flex;
   border-radius: 10px;
-  /* border: 1px solid blue; */
+  border: 1px solid blue;
   color: var(--color-font-darkgray);
   font-family: var(--font-roboto);
   font-weight: 400;
@@ -52,7 +52,7 @@ const Detail = styled.div`
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin: 50px 0 20px 0;
+    /* margin: 50px 0 20px 0; */
   }
 `;
 const ImgContainer = styled.div`
@@ -63,6 +63,9 @@ const ImgContainer = styled.div`
   justify-content: center;
   align-items: center;
   /* border: 1px solid blue; */
+   @media (max-width: 768px) {
+    margin: 10px;
+  }
 `;
 
 const Img = styled.img`
@@ -70,7 +73,7 @@ const Img = styled.img`
   width: 90%;
   height: auto;
   object-fit: contain;
-  /* border: 1px solid red; */
+  border: 1px solid red;
   @media (max-width: 768px) {
     margin: 10px;
   }
@@ -135,14 +138,17 @@ const Category = styled.p`
 
 const Company = styled.p`
   margin-top: 15px;
-  font-size: 13px;
+  font-size: 11px;
   color: #707070;
 `;
 const CompanyName = styled.p`
   margin: 5px 0;
+  font-size: 13px;
+  color:var(--color-font-darkgray)
 `;
 const CompanyURL = styled.a`
   margin-top: 10px;
+  font-size: 13px;
   text-decoration: underline;
   color: var(--color-main-blue);
   cursor: pointer;
