@@ -7,6 +7,7 @@ const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
+//updating the quantity of the item
 
 const updateQuantity = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);

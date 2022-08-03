@@ -8,6 +8,8 @@ const options = {
   useUnifiedTopology: true,
 };
 
+//deletes an item from the cart
+
 const deleteItem = async (req, res) => {
   const user = req.params.user;
   const itemId = req.body._id;

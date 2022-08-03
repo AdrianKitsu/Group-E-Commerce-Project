@@ -8,7 +8,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-// filtering items if theyre instock
+// filtering items if theyre in stock
 const itemsInStock = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
@@ -41,7 +41,7 @@ const itemsInStock = async (req, res) => {
   }
 };
 
-//filtering based on if theyre out of stock
+//filtering based on if they're out of stock
 const itemsOutOfStock = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 

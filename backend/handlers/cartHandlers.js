@@ -98,8 +98,9 @@ const getCart = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("ecommerce");
+    //finding the cart based on the user
     const cart = await db.collection("cart").findOne({ user });
-
+    //if there is a cart it will return status: 200 if no cart status: 404
     if (cart) {
       return res
         .status(200)
