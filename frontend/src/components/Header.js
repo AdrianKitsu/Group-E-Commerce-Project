@@ -19,12 +19,6 @@ const Header = () => {
         <SearchBar placeholder="This is Just Decoration"></SearchBar>
       </SearchContainer>
 
-      <UserName>
-        <LinkUser to={`/order/Marie`}>
-          Welcome back, <b>Marie!</b>
-        </LinkUser>
-      </UserName>
-
       {/* current cart */}
       <Cart>
         <LinkCart to={"/cart"}>
@@ -33,8 +27,7 @@ const Header = () => {
       </Cart>
       {/* order history */}
       <Order>
-        <LinkOrder to={"/order"}>
-          <IoCart size={20} />
+        <LinkOrder to={"/order/Marie"}>
           <Span>Order History</Span>
         </LinkOrder>
       </Order>
@@ -53,30 +46,12 @@ const Wrapper = styled.div`
   background-color: var(--color-main-blue);
 `;
 
-const UserName = styled.text`
-  color: var(--color-main-white);
-  font-size: 14px;
-  font-family: var(--font-poppins);
-  margin-top: 20px;
-  margin-right: 6px;
-  padding-left: 90px;
-`;
-
 const Logo = styled.div`
   color: var(--color-main-white);
   margin-left: 10px;
 `;
 
 const Linkss = styled(Link)`
-  text-decoration: none;
-  color: var(--color-main-white);
-  :hover {
-    cursor: pointer;
-    opacity: 0.6;
-  }
-`;
-
-const LinkUser = styled(Link)`
   text-decoration: none;
   color: var(--color-main-white);
   :hover {

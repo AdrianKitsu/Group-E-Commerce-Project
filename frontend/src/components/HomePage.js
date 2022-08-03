@@ -49,7 +49,7 @@ const HomePage = () => {
 export default HomePage;
 
 const Container = styled.div`
-  background-color: #f4bfbf;
+  background-color: var(--color-main-brown);
   padding-top: 14px;
   padding-bottom: 14px;
 `;
