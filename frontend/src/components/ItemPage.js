@@ -51,8 +51,6 @@ const ItemPage = () => {
         }
       })
       .catch((err) => console.log(err.message));
-
-    console.log("postBody", { ...item, quantity });
   };
 
   return (
