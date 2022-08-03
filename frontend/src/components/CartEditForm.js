@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 
 const CartEditForm = ({ item, updateCart, delelteItem }) => {
+  // console.log('item', item)
   const [editedQuantity, setEditedQuantity] = useState(item.quantity);
-  console.log(item)
+  // console.log('editedQuantity', editedQuantity, typeof(editedQuantity))
   const [totalPrice, setTotalPrice] = useState(
     Number(item.price.slice(1)) * item.quantity
   );
@@ -12,7 +13,7 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
     ev.preventDefault();
     const updatedPrice = Number(item.price.slice(1)) * Number(editedQuantity);
     setTotalPrice(updatedPrice);
-    updateCart(item._id, updatedPrice, Number(editedQuantity));
+    updateCart(item._id, updatedPrice, editedQuantity);
   };
 
   return (
@@ -25,7 +26,7 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
           max={item.numInStock + ""}
           value={editedQuantity}
           onChange={(ev) => {
-            setEditedQuantity(ev.target.value);
+            setEditedQuantity(Number(ev.target.value));
           }}
         />
         <UpdateButton onClick={handleUpdateQuantity}>Update</UpdateButton>
@@ -47,7 +48,6 @@ const Edit = styled.div`
   justify-content: space-evenly;
   padding: 0 30px 90px 30px;
   font-family: var(--font-roboto);
- 
 `;
 const Form = styled.form`
   font-size: 15px;

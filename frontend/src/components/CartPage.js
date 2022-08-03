@@ -7,13 +7,10 @@ import CartEditForm from "./CartEditForm";
 const CartPage = () => {
   const user = "ourUser";
   const navigate = useNavigate();
-  const [cart, setCart] = useState(null);
+  // const [cart, setCart] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubTotal] = useState(null);
-  console.log("cart-", cart);
-  // 0: {itemId: 6544, quantity: 3, total: 74.97, price: '$24.99'}
-  // 1: {quantity: 2, itemId: 6543}
-  // 2: {quantity: 2, itemId: 6544}
+  // console.log("cart-", cart);
 
   console.log("cartItems-", cartItems);
 
@@ -23,41 +20,61 @@ const CartPage = () => {
       .then((data) => {
         console.log(data.data);
         if (data.status === 200) {
-          setCart(data.data.purchasedItems);
-          setSubTotal(
-            data.data.purchasedItems.reduce((accu, curr) => {
-              return Number(curr.price.slice(1)) * curr.quantity + accu;
-            }, 0)
-          );
+          setCartItems(data.data.purchasedItems);
+
+          const totalPrice = data.data.purchasedItems.reduce((prev, curr) => {
+            // console.log(Number(curr.price.slice(1)) * curr.quantity);
+            // console.log("accu", accu);
+            return prev + Number(curr.price.slice(1)) * curr.quantity;
+          }, 0);
+
+          setSubTotal(totalPrice.toFixed(2));
         }
       });
   }, []);
 
-  useEffect(async () => {
-    if (cart) {
-      try {
-        const promises = await Promise.all(
-          cart.map((item) => fetch(`/api/items/${item.itemId}`))
-        );
+  // useEffect(async () => {
+  //   if (cart) {
+  //     try {
+  //       const promises = await Promise.all(
+  //         cart.map((item) => fetch(`/api/items/${item.itemId}`))
+  //       );
 
-        const itemsArr = await Promise.all(promises.map((res) => res.json()));
-        console.log(itemsArr);
+  //       const itemsArr = await Promise.all(promises.map((res) => res.json()));
+  //       console.log(itemsArr);
 
-        setCartItems(
-          itemsArr.map((item) => {
-            const theItem = cart.find((el) => el.itemId === item.data._id);
-            return { ...item.data, quantity: theItem.quantity };
-          })
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, [cart]);
+  //       setCartItems(
+  //         itemsArr.map((item) => {
+  //           const theItem = cart.find((el) => el.itemId === item.data._id);
+  //           return { ...item.data, quantity: theItem.quantity };
+  //         })
+  //       );
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }, [cart]);
 
   //update quantity
   const updateCart = (_id, updatedPrice, editedQuantity) => {
-    console.log("update-", _id, updatedPrice, editedQuantity);
+    const update = { itemId: _id, quantity: editedQuantity };
+
+    // console.log("update-", _id, typeof(_id), editedQuantity, typeof(editedQuantity));
+
+    fetch(`/api/cart/${user}`, {
+      method: "PATCH",
+      body: JSON.stringify(update),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          console.log("update-result", data);
+        }
+      })
+      .catch((err) => console.log(err));
 
     const updatedCartItems = cartItems.map((item) => {
       if (item._id === _id) {
@@ -77,35 +94,23 @@ const CartPage = () => {
     }, 0);
     console.log("updatedSubTotal", updatedSubTotal);
     setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
-
-    //   const update = { _id,  quantity: editedQuantity};
-
-    // fetch('/api/cart', {
-    //  method: "PATCH",
-    //  body: JSON.stringify(update),
-    //  header: "Content-Type": "application/json",
-    // }
-    // )
-    // .then((res) => res.json(update))
-    // .then((data) => {
-    //       console.log(data.data)
-    //     })
-    // .catch((err) => console.log(err));
   };
 
   // delete item
   const handleDelteItem = (_id) => {
-    // fetch('/api/cart/userId', {
-    //  method: "DELETE",
-    //  body: JSON.stringify(_id),
-    //  header: "Content-Type": "application/json",
-    // }
-    // )
-    // .then((res) => res.json())
-    // .then((data) => {
-    //       console.log(data.data)
-    //     })
-    // .catch((err) => console.log(err));
+    console.log("id", _id);
+    fetch(`/api/cart/${user}`, {
+      method: "DELETE",
+      body: JSON.stringify({ _id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("deleted_result", data);
+      })
+      .catch((err) => console.log(err));
 
     const updatedCartItems = cartItems.filter((item) => item._id !== _id);
     setCartItems(updatedCartItems);
@@ -113,34 +118,40 @@ const CartPage = () => {
       if (curr._id === _id) {
         return accu;
       } else {
-        return Number(curr.price.slice(1)) * curr.quantity + accu;
+        return accu + Number(curr.price.slice(1)) * curr.quantity;
       }
     }, 0);
-    console.log("updatedSubTotal", updatedSubTotal);
-    setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
+    // console.log("updatedSubTotal", updatedSubTotal);
+    setSubTotal(updatedSubTotal.toFixed(2));
   };
 
   //post order
   const handleCheckOut = () => {
-    //fetch POST to order endpoint
-    // fetch(`/api/order/userId`, {
-    //   method: "POST",
-    //   body: JSON.stringify(),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //
-    //   });
-    navigate("/order");
+    const orderObject = {
+      user,
+      purchasedItems: cartItems,
+    };
+    fetch(`/api/order`, {
+      method: "POST",
+      body: JSON.stringify(),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          console.log("post order result", data);
+          window.alert("your order is confirmed!");
+          navigate("/order");
+        }
+      })
+      .catch((err) => console.log(err.message));
   };
 
   return (
     <Wrapper>
-      <Title>Shopping Cart</Title>
+      <Title>{`${user}'s Shopping Cart`}</Title>
       {cartItems.length === 0 && <div>Loading ...</div>}
       {cartItems.length > 0 && (
         <Container>
@@ -184,13 +195,13 @@ const Container = styled.ul`
   align-items: center;
   padding-top: 10px;
   font-size: 13px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;
 
 const List = styled.li`
   width: 95%;
   height: 230px;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -228,28 +239,3 @@ const CheckOut = styled.button`
 `;
 
 export default CartPage;
-
-// {
-//       _id: 6544,
-//       quantity: 2,
-//       name: "Belkin GS5 Sport Fit Armband, Black F8M918B1C00",
-//       price: "$24.99",
-//       body_location: "Arms",
-//       category: "Fitness",
-//       imageSrc:
-//         "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
-//       numInStock: 9,
-//       companyId: 16384,
-//     },
-//     {
-//       _id: 6545,
-//       quantity: 1,
-//       name: "Bowflex EZ Pro Strapless Heart Rate Monitor Watch, Black",
-//       price: "$12.99",
-//       body_location: "Wrist",
-//       category: "Medical",
-//       imageSrc:
-//         "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwg...",
-//       numInStock: 5,
-//       companyId: 11385,
-//     },

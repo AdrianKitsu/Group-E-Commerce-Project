@@ -6,6 +6,7 @@ import ItemPage from "./ItemPage";
 import CartPage from "./CartPage";
 import Category from "./Category";
 import FilterHeader from "./FilterHeader";
+import OrderPage from "./OrderPage";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/item/:item" element={<ItemPage />} />
         <Route path="/items/category/:category" element={<Category />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
     </Router>
   );
