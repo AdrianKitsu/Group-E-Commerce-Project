@@ -18,13 +18,20 @@ const Header = () => {
         </SearchIcon>
         <SearchBar placeholder="This is Just Decoration"></SearchBar>
       </SearchContainer>
+
+      <UserName>
+        <LinkUser to={`/order/Marie`}>
+          Welcome back, <b>Marie!</b>
+        </LinkUser>
+      </UserName>
+
       {/* current cart */}
       <Cart>
         <LinkCart to={"/cart"}>
           <IoCartOutline size={30} />
         </LinkCart>
       </Cart>
-      {/* past history */}
+      {/* order history */}
       <Order>
         <LinkOrder to={"/order"}>
           <IoCart size={20} />
@@ -40,9 +47,19 @@ export default Header;
 const Wrapper = styled.div`
   width: 100%;
   padding: 14px;
-  height: 80px;
+  height: fit-content;
+  min-height: 80px;
   display: flex;
   background-color: var(--color-main-blue);
+`;
+
+const UserName = styled.text`
+  color: var(--color-main-white);
+  font-size: 14px;
+  font-family: var(--font-poppins);
+  margin-top: 20px;
+  margin-right: 6px;
+  padding-left: 90px;
 `;
 
 const Logo = styled.div`
@@ -51,6 +68,15 @@ const Logo = styled.div`
 `;
 
 const Linkss = styled(Link)`
+  text-decoration: none;
+  color: var(--color-main-white);
+  :hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+`;
+
+const LinkUser = styled(Link)`
   text-decoration: none;
   color: var(--color-main-white);
   :hover {
@@ -120,6 +146,7 @@ const Order = styled.div`
 `;
 
 const Span = styled.span`
+  text-align: center;
   font-size: 11px;
   font-family: var(--font-poppins);
 `;
