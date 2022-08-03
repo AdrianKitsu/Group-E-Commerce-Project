@@ -23,11 +23,12 @@ const Header = () => {
           <IoCartOutline size={30} />
         </LinkCart>
       </Cart>
+
       <Order>
-        <LinkCart to={"/order"}>
+        <LinkOrder to={"/order"}>
           <IoCart size={20} />
           <Span>Orders</Span>
-        </LinkCart>
+        </LinkOrder>
       </Order>
     </Wrapper>
   );
@@ -40,7 +41,6 @@ const Wrapper = styled.div`
   padding: 14px;
   height: 80px;
   display: flex;
-  justify-content: space-between;
   background-color: var(--color-main-blue);
 `;
 
@@ -67,10 +67,19 @@ const LinkCart = styled(Link)`
   }
 `;
 
+const LinkOrder = styled(Link)`
+  text-decoration: none;
+  color: var(--color-main-white);
+  :hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+`;
+
 const Cart = styled.div`
   color: var(--color-main-white);
   margin-top: 10px;
-  margin-right: -120px;
+  margin-left: auto;
   :hover {
     cursor: pointer;
     opacity: 0.6;
@@ -84,7 +93,8 @@ const SearchIcon = styled.div`
 
 const SearchBar = styled.input`
   height: 30px;
-  width: 500px;
+  max-width: 500px;
+  width: auto;
   margin-top: 10px;
   border-radius: 10px;
   border-style: none;
@@ -94,11 +104,14 @@ const SearchBar = styled.input`
 const SearchContainer = styled.div`
   display: flex;
   vertical-align: middle;
+  align-items: center;
+  margin-left: auto;
 `;
 
 const Order = styled.div`
   margin-top: 17px;
   margin-right: 6px;
+  margin-left: 10px;
   :hover {
     cursor: pointer;
     opacity: 0.6;

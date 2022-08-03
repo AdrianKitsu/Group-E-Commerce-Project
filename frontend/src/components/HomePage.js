@@ -55,7 +55,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   display: grid;
   justify-content: center;
-  grid-template-columns: 250px 250px 250px;
+  grid-template-columns: 250px 250px 250px 250px;
   row-gap: 20px;
   grid-gap: 20px;
   margin-top: 20px;
