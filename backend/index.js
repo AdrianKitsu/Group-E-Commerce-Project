@@ -70,7 +70,7 @@ express()
   //---------------- Order endpoints ---------------------------//
 
   //POST creating an order for checkout --- does not work
-  .post("/api/order", createOrder)
+  .post("/api/order/:user", createOrder)
 
   // GET for retrieving all the orders
   //GET for retreiving an order based on the order _id

@@ -13,7 +13,8 @@ const { v4: uuidv4 } = require("uuid");
 /// create an order
 const createOrder = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const { user, purchasedItems } = req.body;
+  const { purchasedItems } = req.body;
+  const user = req.params.user;
   const _id = uuidv4();
   try {
     await client.connect();
@@ -27,20 +28,37 @@ const createOrder = async (req, res) => {
       });
     }
     // if there are items in array create new order
-    const order = await db.collection("orders").insertOne({ _id, ...req.body });
-    //update numInStock for items purchased
-    await purchasedItems.forEach((item) => {
-      //updating how much is in stock
-      const newInStock = Number(item.numInStock) - Number(item.quantity);
-      const _id = item._id;
-      //updating each item based on their id
-      /////////-----does not work-------/////
-      ////will need to figure out how to update each item in purchasedItems
-      db.collection("items").updateOne(
-        { _id },
-        { $set: { numInStock: newInStock } }
-      );
+    const order = await db
+      .collection("orders")
+      .insertOne({ _id, user, ...req.body });
+
+    //update items collection numInStcok value for each item in purchasedItems array
+    //retrieve the order that was just made
+    const newOrder = await db.collection("orders");
+    //retrieve the list of all items
+    const items = await db.collection("items");
+    //find the correct order
+    await newOrder.find({ _id }).forEach((order) => {
+      //create an async function to go through each item in purchased array
+      order.purchasedItems.forEach(async (item) => {
+        //create a variable that contains a negative value of quantity
+        const reduceBy = item.quantity * -1;
+        //update the item's numInstock
+        const update = await items.updateOne(
+          { _id: item._id },
+          { $inc: { numInStock: reduceBy } }
+        );
+        //console.log whether the item was modified or not
+        if (update.modifiedCount === 1) {
+          console.log(
+            `Success, Inventory id ${item._id} was reduced by ${reduceBy}`
+          );
+        } else {
+          console.log(`Unable to update ${item._id}`);
+        }
+      });
     });
+
     return res
       .status(200)
       .json({ status: 200, data: order, message: "new order created" });
@@ -49,7 +67,7 @@ const createOrder = async (req, res) => {
       .status(500)
       .json({ status: 500, data: req.body, message: err.message });
   } finally {
-    await client.close();
+    client.close();
   }
 };
 
