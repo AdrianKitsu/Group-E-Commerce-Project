@@ -50,6 +50,7 @@ const Edit = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
   font-family: var(--font-roboto);
 
   @media (max-width: 768px) {
@@ -83,7 +84,7 @@ const Label = styled.label`
   }
 `;
 const Input = styled.input`
-  margin-left: 10px;
+  margin-left: 5px;
   @media (max-width: 768px) {
     width: 45%;
   }
