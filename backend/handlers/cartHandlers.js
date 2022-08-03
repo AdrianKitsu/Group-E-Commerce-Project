@@ -42,17 +42,17 @@ const creatingCart = async (req, res) => {
     }
     //if cart exists
     else {
-      //check if item is in cart, if so item will have a length of 1
-      const item = await db
-        .collection("cart")
-        .find(
-          { user },
-          { purchasedItems: { $elemMatch: { _id: req.body._id } } }
-        )
-        .toArray();
+      //find users cart
+      const cartArr = await db.collection("cart").find({ user }).toArray();
+
+      const cart = cartArr[0];
+      //check if item is in users array
+      const item = cart.purchasedItems.filter(
+        (item) => item._id === req.body._id
+      );
       //if the item is in the cart
       if (item.length > 0) {
-        const purchase = item[0].purchasedItems[0];
+        const purchase = item[0];
         //update the quantity of the item
         const updateQuantity = await db.collection("cart").updateOne(
           { user, "purchasedItems._id": req.body._id },
@@ -69,7 +69,7 @@ const creatingCart = async (req, res) => {
           message: "item quantity updated",
         });
       }
-
+      // if item is not in cart it will add it to purchasedItems
       const data = await db.collection("cart").updateOne(
         {
           user,
