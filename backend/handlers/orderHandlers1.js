@@ -71,4 +71,29 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+//retrieves all of users order
+
+const getOrders = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const user = req.params.user;
+  try {
+    await client.connect();
+    const db = client.db("ecommerce");
+    const orders = await db.collection("orders").find({ user }).toArray();
+    orders.length <= 0
+      ? res
+          .status(404)
+          .json({ status: 404, data: orders, message: "No items found" })
+      : res
+          .status(200)
+          .json({ status: 200, data: { orders }, message: "items retrieved" });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ status: 500, data: req.body, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
+module.exports = { createOrder, getOrders };
