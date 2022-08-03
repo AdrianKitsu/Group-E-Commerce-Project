@@ -1,18 +1,16 @@
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ItemDetail from "./ItemDetail";
 import CartEditForm from "./CartEditForm";
 
 const CartPage = () => {
   const user = "ourUser";
   const navigate = useNavigate();
-  // const [cart, setCart] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubTotal] = useState(null);
-  // console.log("cart-", cart);
-
-  console.log("cartItems-", cartItems);
+  
+  // console.log("cartItems-", cartItems);
 
   useEffect(() => {
     fetch(`/api/cart/${user}`)
@@ -33,33 +31,12 @@ const CartPage = () => {
       });
   }, []);
 
-  // useEffect(async () => {
-  //   if (cart) {
-  //     try {
-  //       const promises = await Promise.all(
-  //         cart.map((item) => fetch(`/api/items/${item.itemId}`))
-  //       );
-
-  //       const itemsArr = await Promise.all(promises.map((res) => res.json()));
-  //       console.log(itemsArr);
-
-  //       setCartItems(
-  //         itemsArr.map((item) => {
-  //           const theItem = cart.find((el) => el.itemId === item.data._id);
-  //           return { ...item.data, quantity: theItem.quantity };
-  //         })
-  //       );
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // }, [cart]);
 
   //update quantity
   const updateCart = (_id, updatedPrice, editedQuantity) => {
     const update = { itemId: _id, quantity: editedQuantity };
 
-    // console.log("update-", _id, typeof(_id), editedQuantity, typeof(editedQuantity));
+    console.log("update-", update, typeof(_id));
 
     fetch(`/api/cart/${user}`, {
       method: "PATCH",
@@ -125,7 +102,7 @@ const CartPage = () => {
     setSubTotal(updatedSubTotal.toFixed(2));
   };
 
-  //post order
+  //post order for checkout
   const handleCheckOut = () => {
     const orderObject = {
       user,
@@ -133,7 +110,7 @@ const CartPage = () => {
     };
     fetch(`/api/order`, {
       method: "POST",
-      body: JSON.stringify(),
+      body: JSON.stringify(orderObject),
       headers: {
         "Content-Type": "application/json",
       },
@@ -201,13 +178,14 @@ const Container = styled.ul`
 const List = styled.li`
   width: 95%;
   height: 230px;
-  /* border: 1px solid blue; */
+  border: 1px solid green;
   display: flex;
   /* justify-content: center; */
   align-items: center;
   margin-bottom: 10px;
   /* position: relative; */
   @media (max-width: 768px) {
+    height: 400px;
   }
 `;
 
@@ -218,6 +196,10 @@ const SubTotal = styled.div`
   font-family: var(--font-poppins);
   font-weight: 600;
   /* padding: 10px; */
+  @media (max-width: 768px) {
+  margin: 1% 2% 1% auto;
+  font-size: 12px;
+  }
 `;
 const CheckOut = styled.button`
   display: block;

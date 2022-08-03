@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const CartEditForm = ({ item, updateCart, delelteItem }) => {
   // console.log('item', item)
@@ -38,21 +38,35 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
 };
 
 const Edit = styled.div`
+  border: 1px solid red;
   width: 30%;
   margin-left: 15px;
-  height: 230px;
+  height: 100%;
   background-color: white;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 0 30px 90px 30px;
+  padding: 0 10px 90px 10px;
   font-family: var(--font-roboto);
+
+  @media (max-width: 768px) {
+  
+  }
+  @media (max-width: 425px) {
+  }
 `;
 const Form = styled.form`
   font-size: 15px;
+  display: flex;
+
+ 
 `;
-const Label = styled.label``;
+const Label = styled.label`
+  @media (max-width: 768px) {
+  color: purple;
+  font-size: 14px;
+  }`;
 const Input = styled.input`
   margin-left: 10px;
 `;
@@ -76,6 +90,10 @@ const UpdateButton = styled.button`
 const ItemTotal = styled.div`
   font-size: 15px;
   font-weight: 600;
+    @media (max-width: 768px) {
+  color: purple;
+  font-size: 11px;
+  }
 `;
 
 const DeleteButton = styled.button`
