@@ -58,7 +58,7 @@ const Category = () => {
 export default Category;
 
 const Container = styled.div`
-  background-color: #f4bfbf;
+  background-color: #ded7b1;
   padding-top: 14px;
   padding-bottom: 14px;
 `;
@@ -97,7 +97,7 @@ const Img = styled.img`
 `;
 
 const Name = styled.p`
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: var(--font-poppins);
   font-weight: bold;
   text-align: center;
   text-size-adjust: auto;
