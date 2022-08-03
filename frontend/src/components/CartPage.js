@@ -107,7 +107,7 @@ const CartPage = () => {
       user,
       purchasedItems: cartItems,
     };
-    fetch(`/api/order`, {
+    fetch(`/api/order/${user}`, {
       method: "POST",
       body: JSON.stringify(orderObject),
       headers: {
@@ -118,8 +118,8 @@ const CartPage = () => {
       .then((data) => {
         if (data.status === 200) {
           console.log("post order result", data);
-          window.alert("your order is confirmed!");
-          navigate("/order");
+          // window.alert("your order is confirmed!");
+          navigate(`/order/${user}`);
         }
       })
       .catch((err) => console.log(err.message));
