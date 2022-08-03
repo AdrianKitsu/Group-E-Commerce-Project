@@ -1,4 +1,4 @@
-import { IoCartOutline, IoStorefront, IoSearch } from "react-icons/io5";
+import { IoCartOutline, IoStorefront, IoSearch, IoCart } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -23,6 +23,12 @@ const Header = () => {
           <IoCartOutline size={30} />
         </LinkCart>
       </Cart>
+      <Order>
+        <LinkCart to={"/order"}>
+          <IoCart size={20} />
+          <Span>Orders</Span>
+        </LinkCart>
+      </Order>
     </Wrapper>
   );
 };
@@ -64,7 +70,7 @@ const LinkCart = styled(Link)`
 const Cart = styled.div`
   color: var(--color-main-white);
   margin-top: 10px;
-  margin-right: 20px;
+  margin-right: -120px;
   :hover {
     cursor: pointer;
     opacity: 0.6;
@@ -88,4 +94,19 @@ const SearchBar = styled.input`
 const SearchContainer = styled.div`
   display: flex;
   vertical-align: middle;
+`;
+
+const Order = styled.div`
+  margin-top: 17px;
+  margin-right: 6px;
+  :hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+`;
+
+const Span = styled.span`
+  font-size: 11px;
+  font-family: var(--font-poppins);
+  padding: 2px;
 `;

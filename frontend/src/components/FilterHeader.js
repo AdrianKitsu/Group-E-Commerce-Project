@@ -45,7 +45,7 @@ const Header = styled.div`
 `;
 
 const Filter = styled.div`
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins);
   font-size: 10px;
   font-weight: bold;
   display: flex;
