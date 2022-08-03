@@ -42,7 +42,7 @@ const updateQuantity = async (req, res) => {
       const update = await db
         .collection("cart")
         .updateOne(
-          { user, "purchasedItems._id": _id },
+          { user, "purchasedItems._id": itemId },
           { $set: { "purchasedItems.$.quantity": quantity } }
         );
       return res
