@@ -9,7 +9,7 @@ const {
   itemByBodypart,
   itemByCompany,
 } = require("./handlers/itemFilterHandlers");
-const { createOrder } = require("./handlers/orderHandlers1");
+const { createOrder, getOrders } = require("./handlers/orderHandlers1");
 const {
   addItemToCart,
   creatingCart,
@@ -73,6 +73,7 @@ express()
   .post("/api/order/:user", createOrder)
 
   // GET for retrieving all the orders
+  .get("/api/order/:user", getOrders)
   //GET for retreiving an order based on the order _id
 
   //------------------------CART endpoints ---------------------------//
