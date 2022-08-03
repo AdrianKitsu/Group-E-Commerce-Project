@@ -1,9 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const Category = () => {
+  // sets the param to identify the category
   const { category } = useParams();
   const [categories, setCategories] = useState();
   const [status, setStatus] = useState("loading");
@@ -13,7 +14,7 @@ const Category = () => {
     fetch(`/api/items/category/${category}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // setCategories basically grabs all items in the same cat
         setCategories(data.data);
         setStatus("idle");
       });
@@ -27,9 +28,11 @@ const Category = () => {
     <>
       <Container>
         <Div>
+          {/* //mapping through array of data */}
           {categories.map((theCategory) => {
             return (
               <Item>
+                {/* redirects you to another page that has all items accordig to category */}
                 <NavLink
                   style={{
                     textDecoration: "none",
@@ -37,13 +40,17 @@ const Category = () => {
                     width: "max-content",
                     hover: { cursor: "pointer" },
                   }}
+                  // where you are being redirected to
                   to={`/item/${theCategory._id}`}
                 >
                   <Img
+                    // key will return an individual key for every item
                     key={theCategory}
+                    // src will grab all images of all the items
                     src={theCategory.imageSrc}
                     alt={theCategory.name}
                   />
+                  {/* // gets the name of all items to be displayed below img  */}
                   <Name>{theCategory.name}</Name>
                 </NavLink>
               </Item>

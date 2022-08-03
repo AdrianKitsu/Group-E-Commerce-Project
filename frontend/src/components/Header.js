@@ -5,29 +5,30 @@ import styled from "styled-components";
 const Header = () => {
   return (
     <Wrapper>
+      {/* Homepage */}
       <Logo>
         <Linkss to={"/"}>
           <IoStorefront size={50} />
         </Linkss>
       </Logo>
-
+      {/* search icon with search bar */}
       <SearchContainer>
         <SearchIcon>
           <IoSearch size={20} />
         </SearchIcon>
         <SearchBar placeholder="This is Just Decoration"></SearchBar>
       </SearchContainer>
-
+      {/* current cart */}
       <Cart>
         <LinkCart to={"/cart"}>
           <IoCartOutline size={30} />
         </LinkCart>
       </Cart>
-
+      {/* past history */}
       <Order>
         <LinkOrder to={"/order"}>
           <IoCart size={20} />
-          <Span>Orders</Span>
+          <Span>Order History</Span>
         </LinkOrder>
       </Order>
     </Wrapper>
@@ -111,7 +112,7 @@ const SearchContainer = styled.div`
 const Order = styled.div`
   margin-top: 17px;
   margin-right: 6px;
-  margin-left: 10px;
+  margin-left: 14px;
   :hover {
     cursor: pointer;
     opacity: 0.6;
@@ -121,5 +122,4 @@ const Order = styled.div`
 const Span = styled.span`
   font-size: 11px;
   font-family: var(--font-poppins);
-  padding: 2px;
 `;
