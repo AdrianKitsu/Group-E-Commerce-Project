@@ -9,7 +9,7 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubTotal] = useState(null);
-  
+
   // console.log("cartItems-", cartItems);
 
   useEffect(() => {
@@ -31,12 +31,11 @@ const CartPage = () => {
       });
   }, []);
 
-
   //update quantity
   const updateCart = (_id, updatedPrice, editedQuantity) => {
     const update = { itemId: _id, quantity: editedQuantity };
 
-    console.log("update-", update, typeof(_id));
+    console.log("update-", update, typeof _id);
 
     fetch(`/api/cart/${user}`, {
       method: "PATCH",
@@ -156,7 +155,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
   margin: 0;
   padding: 10px 0;
-  background-color: #ded7b1;
+  background-color: var(--color-main-brown);
 `;
 const Title = styled.div`
   width: 100%;
@@ -172,20 +171,22 @@ const Container = styled.ul`
   align-items: center;
   padding-top: 10px;
   font-size: 13px;
-  /* border: 1px solid red; */
+  /* border: 1px solid purple; */
 `;
 
 const List = styled.li`
   width: 95%;
   height: 230px;
-  border: 1px solid green;
+  /* border: 1px solid green; */
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   margin-bottom: 10px;
-  /* position: relative; */
   @media (max-width: 768px) {
     height: 400px;
+  }
+  @media (max-width: 425px) {
+    flex-direction: column;
+    height: 480px;
   }
 `;
 
@@ -195,10 +196,12 @@ const SubTotal = styled.div`
   margin: 1% 2.5% 1% auto;
   font-family: var(--font-poppins);
   font-weight: 600;
-  /* padding: 10px; */
-  @media (max-width: 768px) {
-  margin: 1% 2% 1% auto;
-  font-size: 12px;
+
+   @media (max-width: 768px) {
+    width: 80%;
+    height: 30px;
+    margin: 5px auto;
+    text-align: center;
   }
 `;
 const CheckOut = styled.button`
@@ -217,6 +220,12 @@ const CheckOut = styled.button`
     opacity: 0.8;
     transform: scale(0.95);
     /* background-color: var(--color-point-pink); */
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
+    height: 35px;
+    margin: 5px auto;
   }
 `;
 
