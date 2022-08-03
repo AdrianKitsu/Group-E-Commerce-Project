@@ -28,9 +28,10 @@ const createOrder = async (req, res) => {
       });
     }
     // if there are items in array create new order
+    const date = new Date().toLocaleString();
     const order = await db
       .collection("orders")
-      .insertOne({ _id, user, ...req.body });
+      .insertOne({ _id, user, date, ...req.body });
 
     //empty the user cart
     await db.collection("cart").deleteOne({ user });
@@ -83,13 +84,16 @@ const getOrders = async (req, res) => {
     await client.connect();
     const db = client.db("ecommerce");
     const orders = await db.collection("orders").find({ user }).toArray();
+    //checking if there are orders in the orders array
     orders.length <= 0
-      ? res
-          .status(404)
-          .json({ status: 404, data: orders, message: "No items found" })
+      ? res.status(404).json({
+          status: 404,
+          data: orders,
+          message: "Opps looks like you have no orders",
+        })
       : res
           .status(200)
-          .json({ status: 200, data: { orders }, message: "items retrieved" });
+          .json({ status: 200, data: { orders }, message: "orders retrieved" });
   } catch (err) {
     return res
       .status(500)
