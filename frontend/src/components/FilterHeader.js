@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 const FilterHeader = () => {
   return (
+    // hard linked everything to appropriate category page
+    // these are the filter options to find items in specific category
     <Header>
       <Filter>
         <div style={{ marginRight: "10px", fontSize: "15px" }}>Filters:</div>
@@ -107,8 +109,6 @@ const LinkPets = styled(Link)`
 `;
 
 const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 50px 50px 50px;
-  column-gap: 30px;
-  row-gap: 10px;
+  display: flex;
+  column-gap: 20px;
 `;

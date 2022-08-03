@@ -6,6 +6,7 @@ const HomePage = () => {
   const [items, setItems] = useState();
   const [status, setStatus] = useState("loading");
 
+  // get all items
   useEffect(() => {
     fetch(`/api/items`)
       .then((res) => res.json())
@@ -24,6 +25,7 @@ const HomePage = () => {
     <>
       <Container>
         <Wrapper>
+          {/* maps through and return components to display all items on Homepage */}
           {items.results.map((theItems) => {
             return (
               <Item>
