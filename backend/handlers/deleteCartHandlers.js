@@ -38,7 +38,7 @@ const deleteItem = async (req, res) => {
       //find cart based on user and check if purchasedItems.length === 0 if true delete the cart
       const cart = await db.collection("cart").findOne({ user });
       if (cart.purchasedItems.length === 0) {
-        const removeCart = await db.collection("cart").remove({ user });
+        const removeCart = await db.collection("cart").deleteOne({ user });
         return res
           .status(200)
           .json({ status: 200, data: removeCart, message: "cart removed" });
@@ -59,4 +59,26 @@ const deleteItem = async (req, res) => {
   }
 };
 
-module.exports = { deleteItem };
+// delete the whole cart based on user
+const deleteCart = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const user = req.params.user;
+  try {
+    await client.connect();
+    const db = client.db("ecommerce");
+    const removed = await db.collection("cart").deleteOne({ user });
+    return res.status(200).json({
+      status: 200,
+      data: removed,
+      message: "users cart has been deleted",
+    });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ status: 500, data: req.body, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
+module.exports = { deleteItem, deleteCart };
