@@ -32,7 +32,10 @@ const createOrder = async (req, res) => {
       .collection("orders")
       .insertOne({ _id, user, ...req.body });
 
-    //update items collection numInStcok value for each item in purchasedItems array
+    //empty the user cart
+    await db.collection("cart").deleteOne({ user });
+
+    //update items collection numInStock value for each item in purchasedItems array
     //retrieve the order that was just made
     const newOrder = await db.collection("orders");
     //retrieve the list of all items
