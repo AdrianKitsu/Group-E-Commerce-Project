@@ -5,7 +5,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import ItemDetail from "./ItemDetail";
 
 const ItemPage = () => {
-  const user = "ourUser";
+  const user = "Marie";
   const itemId = useParams().item;
   const [item, setItem] = useState(null);
   const [message, setMessage] = useState(false);

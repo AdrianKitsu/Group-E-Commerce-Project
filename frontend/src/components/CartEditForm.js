@@ -93,7 +93,7 @@ const UpdateButton = styled.button`
   background-color: transparent;
   border: 1px solid var(--color-point-pink);
   color: var(--color-point-pink);
-  width: 60px;
+  width: 70px;
   height: 25px;
   border-radius: 8px;
   margin-top: 10px;
@@ -126,7 +126,7 @@ const ItemTotal = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  width: 60px;
+  width: 70px;
   height: 25px;
   background-color: transparent;
   border: 1px solid var(--color-point-pink);

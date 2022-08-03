@@ -4,9 +4,8 @@ import styled from "styled-components";
 import ItemDetail from "./ItemDetail";
 
 const OrderPage = () => {
-  const [orderList, setOrderList] = useState([]);
-  const { user } = useParams();
-  console.log("orderList", orderList);
+  const [orderList, setOrderList] = useState(null);
+  const user = "Marie";
 
   useEffect(() => {
     fetch(`/api/order/${user}`)
@@ -20,21 +19,27 @@ const OrderPage = () => {
 
   return (
     <Wrapper>
-      <Title>{user}'s Order List </Title>
-
-      {orderList.length === 0 && <div>Loading ...</div>}
-      {orderList.length > 0 && (
+      <Title> Order List </Title>
+      {!orderList && <Message>loading ...</Message>}
+      {orderList && orderList.length === 0 && (
+        <Message>There is no order list under this user!</Message>
+      )}
+      {orderList && orderList.length > 0 && (
         <Container>
           {orderList.map((order) => {
-          
             const totalPrice = order.purchasedItems.reduce((prev, curr) => {
               return prev + Number(curr.price.slice(1)) * curr.quantity;
             }, 0);
-              console.log("totalPrice", totalPrice)
+
             return (
               <Order>
-                <OrderNumber>order number : {order._id}</OrderNumber>
-                <SubTotal> Subtotal: $  {totalPrice.toFixed(2)}</SubTotal>
+                <OrderNumber>
+                  order number : {order._id}
+                </OrderNumber>
+                <SubTotal>
+                  {" "}
+                  Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
+                </SubTotal>
                 {order.purchasedItems.map((item) => {
                   return (
                     <EachItem key={item._id}>
@@ -73,8 +78,6 @@ const Container = styled.ul`
   flex-direction: column;
   align-items: center;
   font-size: 13px;
-
-  /* border: 1px solid red; */
 `;
 
 const Order = styled.div`
@@ -82,13 +85,21 @@ const Order = styled.div`
   margin: 2% auto;
   font-family: var(--font-roboto);
   font-weight: 300;
-  color: white;
+
+  border-radius: 10px;
   background-color: var(--color-main-blue);
 `;
 
 const OrderNumber = styled.h2`
-  font-size: 12px;
-  padding: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  top: 20px;
+  left: 42px;
+  color: var(--color-font-darkgray);
+`;
+const Span = styled.span`
+  color: white;
 `;
 const SubTotal = styled.div`
   width: 20%;
@@ -98,8 +109,6 @@ const SubTotal = styled.div`
   margin: 0 5% 1% auto;
   font-family: var(--font-poppins);
   font-weight: 600;
-  /* border: 1px solid green; */
-  background-color: var(--color-point-pink);
   color: white;
 `;
 const EachItem = styled.li`
@@ -115,7 +124,16 @@ const EachItem = styled.li`
   @media (max-width: 768px) {
   }
 `;
-
+const Message = styled.div`
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+  font-size: 26px;
+  text-align: center;
+  padding: 10px;
+  font-family: var(--font-poppins);
+`;
 export default OrderPage;
-
-// {totalPrice.toFixed(2)}
