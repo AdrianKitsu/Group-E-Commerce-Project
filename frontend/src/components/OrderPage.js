@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ItemDetail from "./ItemDetail";
 import { IoRefresh } from "react-icons/io5";
+import { SearchBarContext } from "../contexts/searchBarContext";
 
 const OrderPage = () => {
   const [orderList, setOrderList] = useState(null);
 
   //when order page is opened we get the user from params
   const user = useParams().user;
+
+  //get search state variable that was set by searchbar from useContext
+  const { search } = useContext(SearchBarContext);
 
   //get user's order list fetch
   useEffect(() => {
@@ -24,48 +28,72 @@ const OrderPage = () => {
       .catch((err) => console.log(err));
   }, [user]);
 
-  return (
-    <Wrapper>
-      <Title> Order List </Title>
-      {!orderList && (
+  if (!orderList) {
+    return (
+      <Wrapper>
+        <Title> Order List </Title>
         <LoadPage>
           <Icon>
             <IoRefresh size={"80px"} />
           </Icon>
         </LoadPage>
-      )}
+      </Wrapper>
+    );
+  }
+
+  // create a filteredItem variable that will hold the items in the category filtered based on search
+  const filteredItems = orderList.filter((order) => {
+    if (order._id.toLowerCase().includes(search)) {
+      return order;
+    }
+  });
+
+  return (
+    <Wrapper>
+      <Title> Order List </Title>
 
       {orderList && orderList.length === 0 && (
-        <Message>There is no order list under this user!</Message>
+        <Message>There are no orders for this user!</Message>
       )}
       {orderList && orderList.length > 0 && (
         <Container>
-          {orderList.map((order) => {
-            const totalPrice = order.purchasedItems.reduce((prev, curr) => {
-              return prev + Number(curr.price.slice(1)) * curr.quantity;
-            }, 0);
+          {
+            //if the filteredItems array has no orders tell the user
+            filteredItems.length === 0 ? (
+              <Message>
+                looks like nothing matches your search... Please try another
+                order number.
+              </Message>
+            ) : (
+              //display the order that matches in the search bar
+              filteredItems.map((order) => {
+                const totalPrice = order.purchasedItems.reduce((prev, curr) => {
+                  return prev + Number(curr.price.slice(1)) * curr.quantity;
+                }, 0);
 
-            return (
-              <Order key={order._id}>
-                <Head>
-                  <OrderNumber>
-                    order number : <Span>{order._id} </Span>
-                  </OrderNumber>
-                  <SubTotal>
-                    Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
-                  </SubTotal>
-                </Head>
+                return (
+                  <Order key={order._id}>
+                    <Head>
+                      <OrderNumber>
+                        order number : <Span>{order._id} </Span>
+                      </OrderNumber>
+                      <SubTotal>
+                        Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
+                      </SubTotal>
+                    </Head>
 
-                {order.purchasedItems.map((item) => {
-                  return (
-                    <EachItem key={item._id}>
-                      <ItemDetail item={item} detailed="false" />
-                    </EachItem>
-                  );
-                })}
-              </Order>
-            );
-          })}
+                    {order.purchasedItems.map((item) => {
+                      return (
+                        <EachItem key={item._id}>
+                          <ItemDetail item={item} detailed="false" />
+                        </EachItem>
+                      );
+                    })}
+                  </Order>
+                );
+              })
+            )
+          }
         </Container>
       )}
     </Wrapper>
