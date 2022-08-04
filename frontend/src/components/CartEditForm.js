@@ -2,17 +2,21 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const CartEditForm = ({ item, updateCart, delelteItem }) => {
-  // console.log('item', item)
+
   const [editedQuantity, setEditedQuantity] = useState(item.quantity);
-  // console.log('editedQuantity', editedQuantity, typeof(editedQuantity))
   const [totalPrice, setTotalPrice] = useState(
     Number(item.price.slice(1)) * item.quantity
   );
 
+// quantity update button click on the form
   const handleUpdateQuantity = (ev) => {
     ev.preventDefault();
+
+    // update the price by the quantity change
     const updatedPrice = Number(item.price.slice(1)) * Number(editedQuantity);
     setTotalPrice(updatedPrice);
+
+    //updata quantity fetch request function 
     updateCart(item._id, updatedPrice, editedQuantity);
   };
 
@@ -40,7 +44,6 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
 };
 
 const Edit = styled.div`
-  /* border: 1px solid red; */
   width: 30%;
   margin-left: 15px;
   padding: 2% 1%;

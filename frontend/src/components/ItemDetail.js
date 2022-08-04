@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 const ItemDetail = ({ item, company, detailed }) => {
+
   return (
     <Detail>
       <ImgContainer to={`/item/${item._id}`}>
@@ -44,7 +45,6 @@ const Detail = styled.div`
   display: flex;
   align-items: center;
   border-radius: 10px;
-  /* border: 1px solid blue; */
   color: var(--color-font-darkgray);
   font-family: var(--font-roboto);
   font-weight: 400;
@@ -54,7 +54,6 @@ const Detail = styled.div`
     justify-content: center;
     align-items: center;
     padding: 0;
-    /* margin: 50px 0 20px 0; */
   }
 `;
 const ImgContainer = styled(Link)`
@@ -65,7 +64,6 @@ const ImgContainer = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid blue; */
   @media (max-width: 768px) {
     margin: 10px;
   }
@@ -78,7 +76,6 @@ const Img = styled.img`
   width: 90%;
   height: auto;
   object-fit: contain;
-  /* border: 1px solid red; */
   @media (max-width: 768px) {
     margin: 10px;
   }

@@ -6,43 +6,42 @@ import CartEditForm from "./CartEditForm";
 import { IoRefresh } from "react-icons/io5";
 
 const CartPage = () => {
+  //hardcoded userName
   const user = "Marie";
-  const navigate = useNavigate();
+
+  // states update by fetch result
   const [cartItems, setCartItems] = useState(null);
   const [subTotal, setSubTotal] = useState(null);
   const [confirm, setConfirm] = useState(false);
-  const [status, setStatus] = useState("loading");
 
+  //going back to homepage when order is confirmed
+  const navigate = useNavigate();
+
+  //when cartPage is opened, fetch getCart request
   useEffect(() => {
     fetch(`/api/cart/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.data);
-        setStatus("idle");
+        if (data.message === "cart not found") {
+          setCartItems([]);
+        }
         if (data.status === 200) {
           setCartItems(data.data.purchasedItems);
+
+          //calculate subtotal price of items
           const totalPrice = data.data.purchasedItems.reduce((prev, curr) => {
             return prev + Number(curr.price.slice(1)) * curr.quantity;
           }, 0);
           setSubTotal(totalPrice.toFixed(2));
         }
-      });
+      })
+      .catch((err) => console.log(err));
   }, [user]);
 
-  if (status === "loading") {
-    return (
-      <LoadPage>
-        <Icon>
-          <IoRefresh size={"80px"} />
-        </Icon>
-      </LoadPage>
-    );
-  }
-  //update quantity
+  //update quantity of the item function
   const updateCart = (_id, updatedPrice, editedQuantity) => {
+    // PATCH request: update quantity
     const update = { itemId: _id, quantity: editedQuantity };
-
-    // console.log("update-", update, typeof _id);
 
     fetch(`/api/cart/${user}`, {
       method: "PATCH",
@@ -54,33 +53,33 @@ const CartPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          // console.log("update-result", data);
+          //if successful, update states on the frontend
+          const updatedCartItems = cartItems.map((item) => {
+            if (item._id === _id) {
+              return { ...item, quantity: editedQuantity };
+            } else {
+              return item;
+            }
+          });
+          setCartItems(updatedCartItems);
+
+          const updatedSubTotal = cartItems.reduce((accu, curr) => {
+            if (curr._id === _id) {
+              return updatedPrice + accu;
+            } else {
+              return Number(curr.price.slice(1)) * curr.quantity + accu;
+            }
+          }, 0);
+
+          setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
         }
       })
       .catch((err) => console.log(err));
-
-    const updatedCartItems = cartItems.map((item) => {
-      if (item._id === _id) {
-        return { ...item, quantity: editedQuantity };
-      } else {
-        return item;
-      }
-    });
-    setCartItems(updatedCartItems);
-
-    const updatedSubTotal = cartItems.reduce((accu, curr) => {
-      if (curr._id === _id) {
-        return updatedPrice + accu;
-      } else {
-        return Number(curr.price.slice(1)) * curr.quantity + accu;
-      }
-    }, 0);
-    setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
   };
 
-  // delete item
+  // delete item function
   const handleDelteItem = (_id) => {
-    // console.log("id", _id);
+    // DELETE request: deleteItem from user's cart
     fetch(`/api/cart/${user}`, {
       method: "DELETE",
       body: JSON.stringify({ _id }),
@@ -89,28 +88,36 @@ const CartPage = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {})
-      .catch((err) => console.log(err));
+      .then((data) => {
+        if (data.status === 200) {
+          //if the result is success, update states on the fronend
+          const updatedCartItems = cartItems.filter((item) => item._id !== _id);
+          setCartItems(updatedCartItems);
 
-    const updatedCartItems = cartItems.filter((item) => item._id !== _id);
-    setCartItems(updatedCartItems);
-    const updatedSubTotal = cartItems.reduce((accu, curr) => {
-      if (curr._id === _id) {
-        return accu;
-      } else {
-        return accu + Number(curr.price.slice(1)) * curr.quantity;
-      }
-    }, 0);
-    // console.log("updatedSubTotal", updatedSubTotal);
-    setSubTotal(updatedSubTotal.toFixed(2));
+          const updatedSubTotal = cartItems.reduce((accu, curr) => {
+            if (curr._id === _id) {
+              return accu;
+            } else {
+              return accu + Number(curr.price.slice(1)) * curr.quantity;
+            }
+          }, 0);
+
+          setSubTotal(updatedSubTotal.toFixed(2));
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
-  //checkout for order
+  //proceed to checkout for order
   const handleCheckOut = () => {
+
+    //post body
     const orderObject = {
       user,
       purchasedItems: cartItems,
     };
+
+    // POST request : creating a new order
     fetch(`/api/order/${user}`, {
       method: "POST",
       body: JSON.stringify(orderObject),
@@ -121,13 +128,12 @@ const CartPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          // console.log("post order result", data);
           setConfirm(true);
           setCartItems(null);
           setTimeout(() => {
             setConfirm(false);
             navigate("/");
-          }, 1000);
+          }, 1200);
         }
       })
       .catch((err) => console.log(err.message));
@@ -135,8 +141,17 @@ const CartPage = () => {
 
   return (
     <Wrapper>
-      <Title>{`${user}'s Shopping Cart`}</Title>
-
+      <Title>Shopping Cart</Title>
+      {!cartItems && (
+        <LoadPage>
+          <Icon>
+            <IoRefresh size={"80px"} />
+          </Icon>
+        </LoadPage>
+      )}
+      {cartItems && cartItems.length === 0 && (
+        <Message>There is no item in your cart !</Message>
+      )}
       {cartItems && cartItems.length > 0 && (
         <>
           <Container>
@@ -158,7 +173,7 @@ const CartPage = () => {
         </>
       )}
 
-      {confirm && <Message>your order has been confirmed</Message>}
+      {confirm && <Message>your order has been confirmed !</Message>}
     </Wrapper>
   );
 };
@@ -174,7 +189,8 @@ const Title = styled.div`
   width: 100%;
   font-size: 26px;
   font-weight: 600;
-  padding: 5px 35px;
+  padding: 15px;
+  text-align: center;
   font-family: var(--font-poppins);
 `;
 
@@ -184,13 +200,11 @@ const Container = styled.ul`
   align-items: center;
   padding-top: 10px;
   font-size: 13px;
-  /* border: 1px solid purple; */
 `;
 
 const List = styled.li`
   width: 95%;
   height: 230px;
-  /* border: 1px solid green; */
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -232,7 +246,6 @@ const CheckOut = styled.button`
   :hover {
     opacity: 0.8;
     transform: scale(0.95);
-    /* background-color: var(--color-point-pink); */
   }
 
   @media (max-width: 768px) {

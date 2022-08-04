@@ -1,40 +1,56 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import { AiFillCheckCircle } from "react-icons/ai";
 import ItemDetail from "./ItemDetail";
 import { IoRefresh } from "react-icons/io5";
 
 const ItemPage = () => {
+  //hardcoded userName
   const user = "Marie";
-  const itemId = useParams().item;
-  const [item, setItem] = useState(null);
-  const [message, setMessage] = useState(false);
-  const [quantity, setQuantity] = useState(0);
-  const [company, setCompany] = useState(null);
 
+  //itemId from path="/item/:item"
+  const itemId = useParams().item;
+
+  const [item, setItem] = useState(null);
+  const [company, setCompany] = useState(null);
+  const [quantity, setQuantity] = useState(0);
+
+  //by message, the purchase box shows "add to cart" or "added to cart"
+  const [message, setMessage] = useState(false);
+
+  const navigate = useNavigate();
+
+
+   //when itemPage is opened, fetch get getItem
   useEffect(() => {
     if (itemId) {
       fetch(`/api/items/${itemId}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) setItem(data.data);
-        });
+        })
+        .catch((error) => console.log(error));
     }
   }, [itemId]);
 
+
+//when item data received, fetch getCompany by the companyId
   useEffect(() => {
     if (item) {
       fetch(`/api/companies/${item.companyId}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) setCompany(data.data);
-        });
+        })
+        .catch((error) => console.log(error));
     }
   }, [item]);
 
-  // POST item into user's cart
+//when pressing the add button
   const addIntoCart = () => {
+
+    // POST request : create cart
     fetch(`/api/cart/${user}`, {
       method: "POST",
       body: JSON.stringify({ ...item, quantity }),
@@ -46,10 +62,15 @@ const ItemPage = () => {
       .then((data) => {
         if (data.status === 200) {
           setMessage(true);
+          setTimeout(() => {
+            setMessage(false);
+            navigate("/");
+          }, 1000);
         }
       })
       .catch((err) => console.log(err.message));
   };
+ 
 
   return (
     <>
@@ -97,22 +118,21 @@ const ItemPage = () => {
     </>
   );
 };
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
   display: flex;
   justify-content: center;
-
   background-color: var(--color-main-brown);
+
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
   }
-
-  @media (max-width: 425px) {
-  }
+ 
 `;
 
 const Container = styled.div`
@@ -129,6 +149,7 @@ const Container = styled.div`
     height: 420px;
   }
 `;
+
 const PurchaseBox = styled.div`
   width: 20%;
   height: 80px;
@@ -146,8 +167,7 @@ const PurchaseBox = styled.div`
     height: 70px;
     margin: 0;
   }
-  @media (max-width: 425px) {
-  }
+ 
 `;
 const AddButton = styled.button`
   width: 80%;
