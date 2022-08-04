@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { IoRefresh } from "react-icons/io5";
+import { SearchBarContext } from "../contexts/searchBarContext";
 
 const HomePage = () => {
   const [items, setItems] = useState();
   const [status, setStatus] = useState("loading");
+
+  //get search state variable that was set by searchbar from useContext
+  const { search } = useContext(SearchBarContext);
 
   // get all items
   useEffect(() => {
@@ -28,25 +32,39 @@ const HomePage = () => {
     );
   }
 
+  // create a filteredItem variable that will hold the items filtered based on search
+  const filteredItems = items.results.filter((item) => {
+    if (item.name.toLowerCase().includes(search)) {
+      return item;
+    }
+  });
+
   return (
     <>
       <Container>
         <Wrapper>
-          {/* maps through and return components to display all items on Homepage */}
-          {items.results.map((theItems) => {
-            return (
-              <Item>
-                <Linkw to={`item/${theItems._id}`}>
-                  <Img
-                    key={theItems}
-                    src={theItems.imageSrc}
-                    alt={theItems.name}
-                  />
-                  <Name>{theItems.name}</Name>
-                </Linkw>
-              </Item>
-            );
-          })}
+          {
+            //if the filteredItems array has no items tell the user
+            filteredItems.length === 0 ? (
+              <Oops>looks like nothing matches your search...</Oops>
+            ) : (
+              //display items based on what is serached in search bar will show everything if nothing is typed
+              filteredItems.map((theItems) => {
+                return (
+                  <Item>
+                    <Linkw to={`item/${theItems._id}`}>
+                      <Img
+                        key={theItems}
+                        src={theItems.imageSrc}
+                        alt={theItems.name}
+                      />
+                      <Name>{theItems.name}</Name>
+                    </Linkw>
+                  </Item>
+                );
+              })
+            )
+          }
         </Wrapper>
       </Container>
     </>
@@ -59,6 +77,7 @@ const Container = styled.div`
   background-color: var(--color-main-brown);
   padding-top: 14px;
   padding-bottom: 14px;
+  min-height: 83.2vh;
 `;
 
 const Wrapper = styled.div`
@@ -135,4 +154,9 @@ const Icon = styled.div`
       transform: rotate(359deg);
     }
   }
+`;
+
+const Oops = styled.div`
+  font-family: var(--font-poppins);
+  width: 100vw;
 `;
