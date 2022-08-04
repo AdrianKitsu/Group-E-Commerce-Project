@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
+import { IoRefresh } from "react-icons/io5";
 
 const HomePage = () => {
   const [items, setItems] = useState();
@@ -21,7 +21,9 @@ const HomePage = () => {
   if (status === "loading") {
     return (
       <LoadPage>
-        <CircularProgress size={"100px"} />
+        <Icon>
+          <IoRefresh size={"80px"} />
+        </Icon>
       </LoadPage>
     );
   }
@@ -121,4 +123,16 @@ const LoadPage = styled.div`
   height: 100vh;
   color: var(--color-main-blue);
   background-color: var(--color-main-brown);
+`;
+
+const Icon = styled.div`
+  animation: rotation 2s infinite linear;
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
 `;
