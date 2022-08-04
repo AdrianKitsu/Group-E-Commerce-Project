@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ItemDetail from "./ItemDetail";
+import { IoRefresh } from "react-icons/io5";
 
 const OrderPage = () => {
   const [orderList, setOrderList] = useState(null);
   // const user = "Marie";
-  const user = useParams().user
+  const user = useParams().user;
 
   useEffect(() => {
     fetch(`/api/order/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.data.orders);
+        // console.log(data.data.orders);
         if (data.status === 200) setOrderList(data.data.orders);
       })
       .catch((err) => console.log(err));
@@ -21,7 +22,13 @@ const OrderPage = () => {
   return (
     <Wrapper>
       <Title> Order List </Title>
-      {!orderList && <Message>loading ...</Message>}
+      {!orderList && (
+        <LoadPage>
+          <Icon>
+            <IoRefresh size={"80px"} />
+          </Icon>
+        </LoadPage>
+      )}
       {orderList && orderList.length === 0 && (
         <Message>There is no order list under this user!</Message>
       )}
@@ -34,9 +41,7 @@ const OrderPage = () => {
 
             return (
               <Order>
-                <OrderNumber>
-                  order number : {order._id}
-                </OrderNumber>
+                <OrderNumber>order number : {order._id}</OrderNumber>
                 <SubTotal>
                   {" "}
                   Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
@@ -137,4 +142,26 @@ const Message = styled.div`
   padding: 10px;
   font-family: var(--font-poppins);
 `;
+
+const LoadPage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--color-main-blue);
+  background-color: var(--color-main-brown);
+`;
+
+const Icon = styled.div`
+  animation: rotation 2s infinite linear;
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+`;
+
 export default OrderPage;

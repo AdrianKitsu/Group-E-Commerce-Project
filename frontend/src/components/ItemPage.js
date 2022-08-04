@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillCheckCircle } from "react-icons/ai";
 import ItemDetail from "./ItemDetail";
+import { IoRefresh } from "react-icons/io5";
 
 const ItemPage = () => {
   const user = "Marie";
@@ -17,7 +18,6 @@ const ItemPage = () => {
       fetch(`/api/items/${itemId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === 200) setItem(data.data);
         });
     }
@@ -28,7 +28,6 @@ const ItemPage = () => {
       fetch(`/api/companies/${item.companyId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === 200) setCompany(data.data);
         });
     }
@@ -46,7 +45,6 @@ const ItemPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          console.log(data);
           setMessage(true);
         }
       })
@@ -55,7 +53,13 @@ const ItemPage = () => {
 
   return (
     <>
-      {!company && <div> Loading ...</div>}
+      {!company && (
+        <LoadPage>
+          <Icon>
+            <IoRefresh size={"80px"} />
+          </Icon>
+        </LoadPage>
+      )}
       {item && company && (
         <Wrapper>
           <Container>
@@ -99,8 +103,8 @@ const Wrapper = styled.div`
   overflow: hidden;
   display: flex;
   justify-content: center;
- 
- background-color: var(--color-main-brown);
+
+  background-color: var(--color-main-brown);
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
@@ -140,8 +144,7 @@ const PurchaseBox = styled.div`
   @media (max-width: 768px) {
     width: 40%;
     height: 70px;
-    margin:0;
-   
+    margin: 0;
   }
   @media (max-width: 425px) {
   }
@@ -197,4 +200,24 @@ const CartMessage = styled(PurchaseBox)`
   font-size: 16px;
 `;
 
+const LoadPage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--color-main-blue);
+  background-color: var(--color-main-brown);
+`;
+
+const Icon = styled.div`
+  animation: rotation 2s infinite linear;
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+`;
 export default ItemPage;
