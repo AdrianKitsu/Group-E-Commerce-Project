@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const HomePage = () => {
   const [items, setItems] = useState();
@@ -18,7 +19,11 @@ const HomePage = () => {
   }, []);
 
   if (status === "loading") {
-    return <>Loading</>;
+    return (
+      <LoadPage>
+        <CircularProgress size={"100px"} />
+      </LoadPage>
+    );
   }
 
   return (
@@ -73,6 +78,11 @@ const Item = styled.div`
   padding-left: 5px;
   padding-right: 5px;
   background-color: white;
+  transition: transform 250ms, box-shadow 0.25s ease-in-out;
+  :hover {
+    transform: translateY(-7px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const Linkw = styled(Link)`
@@ -102,4 +112,13 @@ const Name = styled.p`
   text-align: center;
   text-size-adjust: auto;
   max-width: 250px;
+`;
+
+const LoadPage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--color-main-blue);
+  background-color: var(--color-main-brown);
 `;
