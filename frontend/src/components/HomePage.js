@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { IoRefresh } from "react-icons/io5";
 import { SearchBarContext } from "../contexts/searchBarContext";
 
+// Project Completed
+
 const HomePage = () => {
   const [items, setItems] = useState();
   const [status, setStatus] = useState("loading");
