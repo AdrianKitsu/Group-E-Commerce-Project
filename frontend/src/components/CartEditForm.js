@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CartEditForm = ({ item, updateCart, delelteItem }) => {
-
   const [editedQuantity, setEditedQuantity] = useState(item.quantity);
   const [totalPrice, setTotalPrice] = useState(
     Number(item.price.slice(1)) * item.quantity
   );
 
-// quantity update button click on the form
+  //stock limit message when user's quantity reaches the stock limit 
+  const [message, setMessage] = useState(false);
+
+  // quantity update button click on the form
   const handleUpdateQuantity = (ev) => {
     ev.preventDefault();
 
@@ -16,25 +18,39 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
     const updatedPrice = Number(item.price.slice(1)) * Number(editedQuantity);
     setTotalPrice(updatedPrice);
 
-    //updata quantity fetch request function 
+    //updata quantity fetch request function
     updateCart(item._id, updatedPrice, editedQuantity);
   };
+
+  useEffect(() => {
+    if (editedQuantity === item.numInStock) {
+      setMessage(true);
+      setTimeout(() => {
+        setMessage(false);
+      }, 1000);
+    }
+  }, [editedQuantity]);
 
   return (
     <Edit>
       <Form>
-        <Inputfield>
-          <Label for="quantity">Qty:</Label>
-          <Input
-            type="number"
-            min="0"
-            max={item.numInStock + ""}
-            value={editedQuantity}
-            onChange={(ev) => {
-              setEditedQuantity(Number(ev.target.value));
-            }}
-          />
-        </Inputfield>
+        {!message ? (
+          <Inputfield>
+            <Label for="quantity">Qty:</Label>
+            <Input
+              type="number"
+              min="0"
+              max={item.numInStock + ""}
+              value={editedQuantity}
+              onChange={(ev) => {
+                setEditedQuantity(Number(ev.target.value));
+              }}
+            />
+          </Inputfield>
+        ) : (
+          <Message>Order limit: {item.numInStock} </Message>
+        )}
+
         <UpdateButton onClick={handleUpdateQuantity}>Update</UpdateButton>
       </Form>
       <ItemTotal>Total price: $ {totalPrice.toFixed(2)} </ItemTotal>
@@ -55,7 +71,7 @@ const Edit = styled.div`
   justify-content: space-evenly;
   align-items: center;
   font-family: var(--font-roboto);
-
+  position: relative;
   @media (max-width: 768px) {
     padding: 10% 1%;
   }
@@ -76,7 +92,16 @@ const Form = styled.form`
     flex-direction: row;
   }
 `;
-
+const Message = styled.h3`
+  font-size: 12px;
+  padding: 8px;
+  border-radius: 25px;
+  background-color: var(--color-point-pink);
+  position: absolute;
+  left: 33%;
+  top: 5%;
+  opacity: 0.7;
+`;
 const Inputfield = styled.div`
   display: flex;
   justify-content: space-between;

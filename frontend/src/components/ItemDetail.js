@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const ItemDetail = ({ item, company, detailed }) => {
-
   return (
     <Detail>
       <ImgContainer to={`/item/${item._id}`}>
@@ -18,9 +17,14 @@ const ItemDetail = ({ item, company, detailed }) => {
             Stock :<Span> {item.numInStock}</Span>
           </Stock>
         ) : (
-          <Quantity>
-            Quantity :<Span> {item.quantity}</Span>
-          </Quantity>
+          <>
+            <Quantity>
+              Quantity :<Span> {item.quantity}</Span>
+            </Quantity>
+            <Stock>
+              Stock :<StockNum> {item.numInStock}</StockNum>
+            </Stock>
+          </>
         )}
         <Category>Category: {item.category}</Category>
         {company && (
@@ -135,6 +139,10 @@ const Span = styled.span`
   @media (max-width: 425px) {
     font-size: 12px;
   }
+`;
+const StockNum = styled(Span)`
+  color: var(--color-font-darkgray);
+  font-weight: 400;
 `;
 const Category = styled.p`
   margin: 10px 0;

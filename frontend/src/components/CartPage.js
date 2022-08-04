@@ -40,6 +40,11 @@ const CartPage = () => {
 
   //update quantity of the item function
   const updateCart = (_id, updatedPrice, editedQuantity) => {
+    if (editedQuantity === 0) {
+      handleDelteItem(_id);
+      return;
+    }
+
     // PATCH request: update quantity
     const update = { itemId: _id, quantity: editedQuantity };
 
@@ -110,7 +115,6 @@ const CartPage = () => {
 
   //proceed to checkout for order
   const handleCheckOut = () => {
-
     //post body
     const orderObject = {
       user,
