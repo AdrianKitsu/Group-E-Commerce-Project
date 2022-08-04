@@ -1,8 +1,11 @@
 import { IoCartOutline, IoStorefront, IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useContext } from "react";
+import { SearchBarContext } from "../contexts/searchBarContext";
 
 const Header = () => {
+  const { setSearch } = useContext(SearchBarContext);
   return (
     <Wrapper>
       {/* Homepage */}
@@ -16,7 +19,13 @@ const Header = () => {
         <SearchIcon>
           <IoSearch size={20} />
         </SearchIcon>
-        <SearchBar placeholder="This is Just Decoration"></SearchBar>
+        <SearchBar
+          className="input"
+          onChange={(e) => {
+            setSearch(e.target.value.toLowerCase());
+          }}
+          placeholder="Search"
+        ></SearchBar>
       </SearchContainer>
 
       {/* current cart */}
@@ -101,6 +110,7 @@ const SearchBar = styled.input`
   border-radius: 10px;
   border-style: none;
   margin-left: 10px;
+  padding-left: 10px;
 `;
 
 const SearchContainer = styled.div`
