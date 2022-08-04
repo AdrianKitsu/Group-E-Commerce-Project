@@ -58,8 +58,9 @@ const LinkFit = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
@@ -67,8 +68,9 @@ const LinkLife = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
@@ -76,8 +78,9 @@ const LinkMed = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
@@ -85,8 +88,9 @@ const LinkGame = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
@@ -94,8 +98,9 @@ const LinkEnt = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
@@ -103,8 +108,9 @@ const LinkPets = styled(Link)`
   text-decoration: none;
   color: black;
   width: max-content;
+  transition: transform 250ms;
   :hover {
-    cursor: pointer;
+    transform: translateY(-2px);
   }
 `;
 
