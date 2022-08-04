@@ -21,9 +21,6 @@ const ItemDetail = ({ item, company, detailed }) => {
             <Quantity>
               Quantity :<Span> {item.quantity}</Span>
             </Quantity>
-            <Stock>
-              Stock :<StockNum> {item.numInStock}</StockNum>
-            </Stock>
           </>
         )}
         <Category>Category: {item.category}</Category>
