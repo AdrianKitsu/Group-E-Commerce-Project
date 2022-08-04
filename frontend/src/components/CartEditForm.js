@@ -23,7 +23,7 @@ const CartEditForm = ({ item, updateCart, delelteItem }) => {
   };
 
   useEffect(() => {
-    if (editedQuantity === item.numInStock) {
+    if (editedQuantity >  item.numInStock) {
       setMessage(true);
       setTimeout(() => {
         setMessage(false);
