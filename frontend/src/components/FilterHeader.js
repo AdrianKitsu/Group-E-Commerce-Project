@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { SearchBarContext } from "../contexts/searchBarContext";
 
 const FilterHeader = () => {
+  const { setSearch } = useContext(SearchBarContext);
+  const clearSearch = () => {
+    setSearch("");
+  };
   return (
     // hard linked everything to appropriate category page
     // these are the filter options to find items in specific category
@@ -9,27 +15,30 @@ const FilterHeader = () => {
       <Filter>
         <div style={{ marginRight: "10px", fontSize: "15px" }}>Filters:</div>
         <Grid>
-          <LinkFit to={`/items/category/Fitness`}>
+          <LinkFit to={`/items/category/Fitness`} onClick={clearSearch}>
             <ul>Fitness</ul>
           </LinkFit>
 
-          <LinkLife to={`/items/category/Lifestyle`}>
+          <LinkLife to={`/items/category/Lifestyle`} onClick={clearSearch}>
             <ul>Lifestyle</ul>
           </LinkLife>
 
-          <LinkMed to={`/items/category/Medical`}>
+          <LinkMed to={`/items/category/Medical`} onClick={clearSearch}>
             <ul>Medical</ul>
           </LinkMed>
 
-          <LinkGame to={`/items/category/Gaming`}>
+          <LinkGame to={`/items/category/Gaming`} onClick={clearSearch}>
             <ul>Gaming</ul>
           </LinkGame>
 
-          <LinkEnt to={`/items/category/Entertainment`}>
+          <LinkEnt to={`/items/category/Entertainment`} onClick={clearSearch}>
             <ul>Entertainment</ul>
           </LinkEnt>
 
-          <LinkPets to={`/items/category/Pets%20and%20Animals`}>
+          <LinkPets
+            to={`/items/category/Pets%20and%20Animals`}
+            onClick={clearSearch}
+          >
             <ul>Pets and Animals</ul>
           </LinkPets>
         </Grid>

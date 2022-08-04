@@ -5,12 +5,15 @@ import { useContext } from "react";
 import { SearchBarContext } from "../contexts/searchBarContext";
 
 const Header = () => {
-  const { setSearch } = useContext(SearchBarContext);
+  const { search, setSearch } = useContext(SearchBarContext);
+  const clearSearch = () => {
+    setSearch("");
+  };
   return (
     <Wrapper>
       {/* Homepage */}
       <Logo>
-        <Linkss to={"/"}>
+        <Linkss to={"/"} onClick={clearSearch}>
           <IoStorefront size={50} />
         </Linkss>
       </Logo>
@@ -24,19 +27,20 @@ const Header = () => {
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
+          value={search}
           placeholder="Search"
         ></SearchBar>
       </SearchContainer>
 
       {/* current cart */}
       <Cart>
-        <LinkCart to={"/cart"}>
+        <LinkCart to={"/cart"} onClick={clearSearch}>
           <IoCartOutline size={30} />
         </LinkCart>
       </Cart>
       {/* order history */}
       <Order>
-        <LinkOrder to={"/order/Marie"}>
+        <LinkOrder to={"/order/Marie"} onClick={clearSearch}>
           <Span>Order History</Span>
         </LinkOrder>
       </Order>
@@ -111,6 +115,7 @@ const SearchBar = styled.input`
   border-style: none;
   margin-left: 10px;
   padding-left: 10px;
+  width: 25vw;
 `;
 
 const SearchContainer = styled.div`

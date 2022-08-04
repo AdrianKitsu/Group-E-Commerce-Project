@@ -61,7 +61,7 @@ const OrderPage = () => {
             //if the filteredItems array has no orders tell the user
             filteredItems.length === 0 ? (
               <Message>
-                looks like nothing matches your search... Please try another
+                Looks like nothing matches your search... Please try another
                 order number.
               </Message>
             ) : (
