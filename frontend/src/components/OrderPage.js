@@ -5,7 +5,8 @@ import ItemDetail from "./ItemDetail";
 
 const OrderPage = () => {
   const [orderList, setOrderList] = useState(null);
-  const user = "Marie";
+  // const user = "Marie";
+  const user = useParams().user
 
   useEffect(() => {
     fetch(`/api/order/${user}`)
