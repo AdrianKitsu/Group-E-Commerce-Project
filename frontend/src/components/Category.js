@@ -1,8 +1,8 @@
-import CircularProgress from "@mui/material/CircularProgress";
 import React from "react";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { IoRefresh } from "react-icons/io5";
 
 const Category = () => {
   // sets the param to identify the category
@@ -24,7 +24,9 @@ const Category = () => {
   if (status === "loading") {
     return (
       <LoadPage>
-        <CircularProgress size={"100px"} />
+        <Icon>
+          <IoRefresh size={"80px"} />
+        </Icon>
       </LoadPage>
     );
   }
@@ -128,4 +130,16 @@ const LoadPage = styled.div`
   height: 100vh;
   color: var(--color-main-blue);
   background-color: var(--color-main-brown);
+`;
+
+const Icon = styled.div`
+  animation: rotation 2s infinite linear;
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
 `;
