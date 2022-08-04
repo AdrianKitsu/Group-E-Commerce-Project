@@ -9,7 +9,6 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(null);
   const [subTotal, setSubTotal] = useState(null);
-  const [empty, setEmpty] = useState(false);
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const CartPage = () => {
       });
   }, [user]);
 
-  
   //update quantity
   const updateCart = (_id, updatedPrice, editedQuantity) => {
     const update = { itemId: _id, quantity: editedQuantity };
@@ -99,29 +97,7 @@ const CartPage = () => {
     setSubTotal(updatedSubTotal.toFixed(2));
   };
 
-const emptyCart = () => {
-    fetch(`/api/empty-cart/${user}`, {
-      method: "DELETE",
-      body: JSON.stringify({ user }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          console.log("deletedd-result", data);
-          setCartItems(null);
-          setConfirm(true);
 
-          setTimeout(() => {
-            setConfirm(false);
-            navigate("/");
-          }, 1500);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
 
   //checkout for order
   const handleCheckOut = () => {
@@ -140,7 +116,12 @@ const emptyCart = () => {
       .then((data) => {
         if (data.status === 200) {
           console.log("post order result", data);
-          emptyCart();
+          setConfirm(true);
+          setCartItems(null);
+          setTimeout(() => {
+            setConfirm(false);
+            navigate("/");
+          }, 1000);
         }
       })
       .catch((err) => console.log(err.message));
@@ -149,7 +130,7 @@ const emptyCart = () => {
   return (
     <Wrapper>
       <Title>{`${user}'s Shopping Cart`}</Title>
-            
+
       {cartItems && cartItems.length > 0 && (
         <>
           <Container>
@@ -265,6 +246,5 @@ const Message = styled.div`
   text-align: center;
   padding: 10px;
   font-family: var(--font-poppins);
-
 `;
 export default CartPage;
