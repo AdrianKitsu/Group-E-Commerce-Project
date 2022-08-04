@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ItemDetail from "./ItemDetail";
 import CartEditForm from "./CartEditForm";
+import { IoRefresh } from "react-icons/io5";
 
 const CartPage = () => {
   const user = "Marie";
@@ -10,14 +11,15 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState(null);
   const [subTotal, setSubTotal] = useState(null);
   const [confirm, setConfirm] = useState(false);
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     fetch(`/api/cart/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.data);
+        // console.log(data.data);
+        setStatus("idle");
         if (data.status === 200) {
-          // console.log(data);
           setCartItems(data.data.purchasedItems);
           const totalPrice = data.data.purchasedItems.reduce((prev, curr) => {
             return prev + Number(curr.price.slice(1)) * curr.quantity;
@@ -27,11 +29,20 @@ const CartPage = () => {
       });
   }, [user]);
 
+  if (status === "loading") {
+    return (
+      <LoadPage>
+        <Icon>
+          <IoRefresh size={"80px"} />
+        </Icon>
+      </LoadPage>
+    );
+  }
   //update quantity
   const updateCart = (_id, updatedPrice, editedQuantity) => {
     const update = { itemId: _id, quantity: editedQuantity };
 
-    console.log("update-", update, typeof _id);
+    // console.log("update-", update, typeof _id);
 
     fetch(`/api/cart/${user}`, {
       method: "PATCH",
@@ -43,7 +54,7 @@ const CartPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          console.log("update-result", data);
+          // console.log("update-result", data);
         }
       })
       .catch((err) => console.log(err));
@@ -64,13 +75,12 @@ const CartPage = () => {
         return Number(curr.price.slice(1)) * curr.quantity + accu;
       }
     }, 0);
-    console.log("updatedSubTotal", updatedSubTotal);
     setSubTotal(Number.parseFloat(updatedSubTotal).toFixed(2));
   };
 
   // delete item
   const handleDelteItem = (_id) => {
-    console.log("id", _id);
+    // console.log("id", _id);
     fetch(`/api/cart/${user}`, {
       method: "DELETE",
       body: JSON.stringify({ _id }),
@@ -79,9 +89,7 @@ const CartPage = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("deleted_result", data);
-      })
+      .then((data) => {})
       .catch((err) => console.log(err));
 
     const updatedCartItems = cartItems.filter((item) => item._id !== _id);
@@ -96,8 +104,6 @@ const CartPage = () => {
     // console.log("updatedSubTotal", updatedSubTotal);
     setSubTotal(updatedSubTotal.toFixed(2));
   };
-
-
 
   //checkout for order
   const handleCheckOut = () => {
@@ -115,7 +121,7 @@ const CartPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          console.log("post order result", data);
+          // console.log("post order result", data);
           setConfirm(true);
           setCartItems(null);
           setTimeout(() => {
@@ -246,5 +252,26 @@ const Message = styled.div`
   text-align: center;
   padding: 10px;
   font-family: var(--font-poppins);
+`;
+
+const LoadPage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--color-main-blue);
+  background-color: var(--color-main-brown);
+`;
+
+const Icon = styled.div`
+  animation: rotation 2s infinite linear;
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
 `;
 export default CartPage;

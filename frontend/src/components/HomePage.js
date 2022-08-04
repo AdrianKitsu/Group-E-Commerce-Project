@@ -16,7 +16,7 @@ const HomePage = () => {
     fetch(`/api/items`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.data);
+        // console.log(data.data);
         setItems(data.data);
         setStatus("idle");
       });

@@ -10,7 +10,6 @@ const Category = () => {
   const { category } = useParams();
   const [categories, setCategories] = useState();
   const [status, setStatus] = useState("loading");
-  console.log(category);
 
   //get search state variable that was set by searchbar from useContext
   const { search } = useContext(SearchBarContext);
