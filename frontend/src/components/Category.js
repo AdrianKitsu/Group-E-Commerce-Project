@@ -92,7 +92,7 @@ const Container = styled.div`
   background-color: var(--color-main-brown);
   padding-top: 14px;
   padding-bottom: 14px;
-  min-height: 83.2vh;
+  min-height: 100vh;
 `;
 
 const Div = styled.div`
