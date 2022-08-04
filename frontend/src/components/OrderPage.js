@@ -6,15 +6,20 @@ import { IoRefresh } from "react-icons/io5";
 
 const OrderPage = () => {
   const [orderList, setOrderList] = useState(null);
-  // const user = "Marie";
+
+  //when order page is opened we get the user from params
   const user = useParams().user;
 
+  //get user's order list fetch
   useEffect(() => {
     fetch(`/api/order/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.data.orders);
-        if (data.status === 200) setOrderList(data.data.orders);
+        if (data.status === 200) {
+          setOrderList(data.data.orders);
+        } else if (data.status === 404) {
+          setOrderList(data.data);
+        }
       })
       .catch((err) => console.log(err));
   }, [user]);
@@ -29,6 +34,7 @@ const OrderPage = () => {
           </Icon>
         </LoadPage>
       )}
+
       {orderList && orderList.length === 0 && (
         <Message>There is no order list under this user!</Message>
       )}
@@ -40,12 +46,16 @@ const OrderPage = () => {
             }, 0);
 
             return (
-              <Order>
-                <OrderNumber>order number : {order._id}</OrderNumber>
-                <SubTotal>
-                  {" "}
-                  Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
-                </SubTotal>
+              <Order key={order._id}>
+                <Head>
+                  <OrderNumber>
+                    order number : <Span>{order._id} </Span>
+                  </OrderNumber>
+                  <SubTotal>
+                    Subtotal: $ <Span>{totalPrice.toFixed(2)}</Span>
+                  </SubTotal>
+                </Head>
+
                 {order.purchasedItems.map((item) => {
                   return (
                     <EachItem key={item._id}>
@@ -61,87 +71,6 @@ const OrderPage = () => {
     </Wrapper>
   );
 };
-
-const Wrapper = styled.div`
-  min-height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 5px 0;
-  background-color: var(--color-main-brown);
-`;
-
-const Title = styled.h2`
-  width: 100%;
-  font-size: 26px;
-  font-weight: 600;
-  padding: 5px;
-  text-align: center;
-  font-family: var(--font-poppins);
-`;
-
-const Container = styled.ul`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 13px;
-`;
-
-const Order = styled.div`
-  width: 80%;
-  margin: 2% auto;
-  font-family: var(--font-roboto);
-  font-weight: 300;
-
-  border-radius: 10px;
-  background-color: var(--color-main-blue);
-`;
-
-const OrderNumber = styled.h2`
-  font-size: 14px;
-  font-weight: 400;
-  position: relative;
-  top: 20px;
-  left: 42px;
-  color: var(--color-font-darkgray);
-`;
-const Span = styled.span`
-  color: white;
-`;
-const SubTotal = styled.div`
-  width: 20%;
-  height: 25px;
-  border-radius: 5px;
-  padding: 3px;
-  margin: 0 5% 1% auto;
-  font-family: var(--font-poppins);
-  font-weight: 600;
-  color: white;
-`;
-const EachItem = styled.li`
-  width: 90%;
-  margin: 0 auto;
-  height: 230px;
-  /* border: 1px solid blue; */
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  margin-bottom: 10px;
-  /* position: relative; */
-  @media (max-width: 768px) {
-  }
-`;
-const Message = styled.div`
-  position: absolute;
-  top: 300px;
-  left: 0;
-  width: 100%;
-  height: 300px;
-  margin: 0 auto;
-  font-size: 26px;
-  text-align: center;
-  padding: 10px;
-  font-family: var(--font-poppins);
-`;
 
 const LoadPage = styled.div`
   display: flex;
@@ -162,6 +91,91 @@ const Icon = styled.div`
       transform: rotate(359deg);
     }
   }
+`;
+const Wrapper = styled.div`
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 5px 0;
+  background-color: var(--color-main-brown);
+`;
+
+const Title = styled.h2`
+  width: 100%;
+  font-size: 26px;
+  font-weight: 600;
+  padding: 15px;
+  text-align: center;
+  font-family: var(--font-poppins);
+`;
+
+const Container = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+`;
+
+const Order = styled.div`
+  width: 80%;
+  margin-bottom: 3%;
+  font-family: var(--font-roboto);
+  font-weight: 300;
+  border-radius: 10px;
+  background-color: var(--color-main-blue);
+`;
+
+const Head = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2% 5%;
+  align-items: center;
+  color: var(--color-font-darkgray);
+`;
+const OrderNumber = styled.h3`
+  font-size: 14px;
+  font-weight: 400;
+  @media (max-width: 425px) {
+    font-size: 12px;
+  }
+`;
+const Span = styled.span`
+  font-size: 13px;
+  color: var(--color-font-darkgray);
+`;
+const SubTotal = styled.h2`
+  height: 25px;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+`;
+const EachItem = styled.li`
+  width: 90%;
+  margin: 0 auto;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  @media (max-width: 768px) {
+    height: 400px;
+  }
+  @media (max-width: 425px) {
+    flex-direction: column;
+    height: 320px;
+  }
+`;
+const Message = styled.div`
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+  font-size: 26px;
+  text-align: center;
+  padding: 10px;
+  font-family: var(--font-poppins);
 `;
 
 export default OrderPage;
